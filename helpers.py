@@ -159,6 +159,23 @@ def download_pdf(soup, file_name):
                     f.write(pdf_link.content)
 
 
+def team_points_creator():
+    """
+    Creates team points value by adding total points by 4 first jumpers from each nationality. If the team consists of 3
+     jumpers, her/his points are added twice. If the team consists of two or one people total_points = 'NULL'
+    :return: team_points
+    """
+    pass
+
+
+def team_ranking_creator():
+    """
+    Creates team ranking based on team_points value.
+    :return: team_points
+    """
+    pass
+
+
 def clear_tables(data):
     """
     Function clears table if rows are not valid (dasen't hold jumper data).
