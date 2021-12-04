@@ -9,7 +9,7 @@ def pdf_with_no_tables_scraper(row_data):
     :param row_data: unformatted data from pdf
     :return: formatted data into csv
     """
-
+    print('pdf wit no tables scraper')
     pass
 
 
@@ -19,5 +19,6 @@ def table_scraper_individual(raw_data):
     :param raw_data: data from pdf tables extracted by pdfplumber
     :return: formatted data into csv
     """
+    print('pdf table scraper with tables')
 
     pass

@@ -23,7 +23,29 @@ def raw_data_from_tables(fis_pdf):
     # for pdf that pdfplumber not see tables
     if len(content_page_1) == 0:
         print('PDF with no tables!')
-        pass
+
+        page_2 = pdf_file.pages[1]
+
+        content_1 = page_1.extract_text().split('\n')[16:-2]
+        content_2 = page_2.extract_text().split('\n')[7:-2]
+
+        content = content_1 + content_2
+
+        # clear rows
+        raw_content = []
+        data_to_skip = ['Club', 'Rank', 'Name', 'Fini', 'Not ', 'Disq', 'Did ', 'Code']
+
+        for row in content:
+            line = row.split('\n')
+
+            if line[0][0:4] in data_to_skip:
+                continue
+            elif line[0] == 'Weather Information':
+                break
+
+            raw_content.append(line)
+
+        all_content = pdf_with_no_tables_scraper(raw_content)
 
     # pdf with only 1 page
     elif len(pdf_file.pages) == 1:
