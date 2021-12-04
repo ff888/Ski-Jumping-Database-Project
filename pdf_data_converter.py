@@ -10,6 +10,19 @@ def pdf_with_no_tables_scraper(row_data):
     :return: formatted data into csv
     """
     print('pdf wit no tables scraper')
+    
+    # data list length counter
+    n = int(len(row_data) / 3)
+
+    # jumper raw data list of lists creator
+    jumper_content = []
+
+    for _ in range(n):
+        jumper_row_list = [row_data[0], row_data[1], row_data[2]]
+        jumper_content.append(jumper_row_list)
+        del row_data[0:3]
+
+
     pass
 
 
