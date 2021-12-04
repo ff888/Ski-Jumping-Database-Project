@@ -66,15 +66,15 @@ def main():
                     if file_name[-1] == 'I':
                         print('Individual PDF')
 
-                        """# download pdf
+                        # download pdf
                         download_pdf(soup, file_name)
 
                         # unpack tabular data
-                        raw_data_from_tables(file_name, cod)"""
+                        raw_data_from_tables(file_name)
 
                     # for team and mixed competition 2002 and after (pdfs)
                     elif file_name[-1] == 'T' or file_name[-1] == 'X':
-                        print('Team pdf')
+                        print('Team PDF')
                         pass
 
                 # before 2002 data is on websites only
