@@ -5,7 +5,7 @@ HEADERS = ['RANKING', 'NAME', 'NATIONALITY', 'DOB', 'CLUB', 'DISTANCE JUMP 1', '
            'DISTANCE POINTS JUMP 2', 'SPEED JUMP 2', 'JUDGE MARKS A JUMP 2', 'JUDGE MARKS B JUMP 2',
            'JUDGE MARKS C JUMP 2', 'JUDGE MARKS D JUMP 2', 'JUDGE MARKS E JUMP 2', 'JUDGE TOTAL POINTS JUMP 2',
            'GATE JUMP 2', 'GATE COMPENSATION JUMP 2', 'WIND JUMP 2', 'WIND COMPENSATION JUMP 2', 'TOTAL POINTS JUMP 2',
-           'RANKING JUMP 2', 'TOTAL POINTS']
+           'RANKING JUMP 2', 'TOTAL POINTS', 'TEAM POINTS', 'TEAM RANKING']
 
 
 ranking = 'NULL'
@@ -44,6 +44,65 @@ wind_compensation_2 = 'NULL'
 total_points_jump_2 = 'NULL'
 ranking_jump_2 = 'NULL'
 total_points = 'NULL'
+team_points = 'NULL'
+team_ranking = 'NULL'
+
+
+""" no tables 2854
+ranking = row_data[1][0].split()[0].replace('.', '')
+        name = ' '.join(row_data[0][0].split()[:-16]).title()
+        nationality = row_data[0][0].split()[-16]
+        dob = ' '.join(row_data[2][0].split()[-18:-15])
+        club = ' '.join(row_data[2][0].split()[:-18]).title()
+
+        distance_jump_1 = row_data[0][0].split()[-14]
+        distance_points_1 = row_data[0][0].split()[-13]
+        speed_jump_1 = row_data[0][0].split()[-15]
+        judge_marks_jump_1a = row_data[0][0].split()[-12]
+        judge_marks_jump_1b = row_data[0][0].split()[-11]
+        judge_marks_jump_1c = row_data[0][0].split()[-10]
+        judge_marks_jump_1d = row_data[0][0].split()[-9]
+        judge_marks_jump_1e = row_data[0][0].split()[-8]
+        judge_total_points_1 = row_data[0][0].split()[-7]
+        gate_jump_1 = row_data[0][0].split()[-6]
+        gate_compensation_1 = row_data[0][0].split()[-5]
+        wind_jump_1 = row_data[0][0].split()[-4]
+        wind_compensation_1 = row_data[0][0].split()[-3]
+        total_points_jump_1 = row_data[0][0].split()[-2]
+        ranking_jump_1 = row_data[0][0].split()[-1].replace('.', ' ')
+
+        distance_jump_2 = row_data[2][0].split()[-14]
+        distance_points_2 = row_data[2][0].split()[-13]
+        speed_jump_2 = row_data[2][0].split()[-15]
+        judge_marks_jump_2a = row_data[2][0].split()[-12]
+        judge_marks_jump_2b = row_data[2][0].split()[-11]
+        judge_marks_jump_2c = row_data[2][0].split()[-10]
+        judge_marks_jump_2d = row_data[2][0].split()[-9]
+        judge_marks_jump_2e = row_data[2][0].split()[-8]
+        judge_total_points_2 = row_data[2][0].split()[-7]
+        gate_jump_2 = row_data[2][0].split()[-6]
+        gate_compensation_2 = row_data[2][0].split()[-5]
+        wind_jump_2 = row_data[2][0].split()[-4]
+        wind_compensation_2 = row_data[2][0].split()[-3]
+        total_points_jump_2 = row_data[2][0].split()[-2]
+        ranking_jump_2 = row_data[2][0].split()[-1]
+
+        total_points = row_data[1][0].split()[-1]
+
+        team_points = 'NULL'
+        team_ranking = 'NULL'
+
+        jumper_line = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1,
+                       speed_jump_1, judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c,
+                       judge_marks_jump_1d, judge_marks_jump_1e, judge_total_points_1, gate_jump_1,
+                       gate_compensation_1, wind_jump_1, wind_compensation_1, total_points_jump_1,
+                       ranking_jump_1, distance_jump_2, distance_points_2, speed_jump_2,
+                       judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
+                       judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2,
+                       wind_jump_2, wind_compensation_2, total_points_jump_2, ranking_jump_2,
+                       total_points, team_points, team_ranking]
+"""
+
 
 
 # 923 individual tournaments

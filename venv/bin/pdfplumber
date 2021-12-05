@@ -1,10 +1,10 @@
 #!/Users/pik/PycharmProjects/pythonProject/Ski_Jumping_Data_Base_Project/venv/bin/python
-# EASY-INSTALL-ENTRY-SCRIPT: 'pdfplumber==0.5.28','console_scripts','pdfplumber'
+# EASY-INSTALL-ENTRY-SCRIPT: 'pdfplumber==0.5.27','console_scripts','pdfplumber'
 import re
 import sys
 
 # for compatibility with easy_install; see #2198
-__requires__ = 'pdfplumber==0.5.28'
+__requires__ = 'pdfplumber==0.5.27'
 
 try:
     from importlib.metadata import distribution
@@ -30,4 +30,4 @@ globals().setdefault('load_entry_point', importlib_load_entry_point)
 
 if __name__ == '__main__':
     sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
-    sys.exit(load_entry_point('pdfplumber==0.5.28', 'console_scripts', 'pdfplumber')())
+    sys.exit(load_entry_point('pdfplumber==0.5.27', 'console_scripts', 'pdfplumber')())

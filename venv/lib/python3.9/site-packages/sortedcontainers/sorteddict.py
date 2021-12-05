@@ -19,8 +19,6 @@ Sorted dict implementations:
 import sys
 import warnings
 
-from itertools import chain
-
 from .sortedlist import SortedList, recursive_repr
 from .sortedset import SortedSet
 
@@ -29,11 +27,9 @@ from .sortedset import SortedSet
 ###############################################################################
 
 try:
-    from collections.abc import (
-        ItemsView, KeysView, Mapping, ValuesView, Sequence
-    )
+    from collections.abc import ItemsView, KeysView, ValuesView, Sequence
 except ImportError:
-    from collections import ItemsView, KeysView, Mapping, ValuesView, Sequence
+    from collections import ItemsView, KeysView, ValuesView, Sequence
 
 ###############################################################################
 # END Python 2/3 Shims
@@ -300,25 +296,6 @@ class SortedDict(dict):
         dict.__setitem__(self, key, value)
 
     _setitem = __setitem__
-
-
-    def __or__(self, other):
-        if not isinstance(other, Mapping):
-            return NotImplemented
-        items = chain(self.items(), other.items())
-        return self.__class__(self._key, items)
-
-
-    def __ror__(self, other):
-        if not isinstance(other, Mapping):
-            return NotImplemented
-        items = chain(other.items(), self.items())
-        return self.__class__(self._key, items)
-
-
-    def __ior__(self, other):
-        self._update(other)
-        return self
 
 
     def copy(self):
