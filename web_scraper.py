@@ -143,6 +143,8 @@ def save_into_csv_file(data, file_name):
         wind_compensation_2 = 'NULL'
         total_points_jump_2 = 'NULL'
         ranking_jump_2 = 'NULL'
+        team_points = 'NULL'
+        team_ranking = 'NULL'
 
         for line in data:
             ranking = line[0]
@@ -150,12 +152,12 @@ def save_into_csv_file(data, file_name):
             nationality = line[2]
             total_points = line[3]
 
-            row = [ranking, name, nationality, total_points, dob, club, distance_jump_1, distance_points_1,
-                   speed_jump_1, judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
+            row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
+                   judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
                    judge_marks_jump_1e, judge_total_points_1, gate_jump_1, gate_compensation_1, wind_jump_1,
                    wind_compensation_1, total_points_jump_1, ranking_jump_1, distance_jump_2, distance_points_2,
                    speed_jump_2, judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
                    judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2, wind_jump_2,
-                   wind_compensation_2, total_points_jump_2, ranking_jump_2]
+                   wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
 
             csv_writer.writerow(row)
