@@ -33,7 +33,7 @@ def raw_data_from_tables(fis_pdf):
 
         # clear rows
         raw_content = []
-        data_to_skip = ['Club', 'Rank', 'Name', 'Fini', 'Not ', 'Disq', 'Did ', 'Code']
+        data_to_skip = ['Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Did ', 'Code', 'PRAG', 'NOC ', 'Not ']
 
         for row in content:
             line = row.split('\n')
