@@ -3,7 +3,7 @@ from pdf_data_converter import pdf_with_no_tables_scraper, table_scraper_individ
 from helpers import clear_tables
 
 
-def raw_data_from_tables(fis_pdf):
+def raw_data_from_tables(fis_pdf, cod):
     """
     Function extracts tabular data from pdf.
     :param fis_pdf: pdf file in the same directory
@@ -45,7 +45,7 @@ def raw_data_from_tables(fis_pdf):
 
             raw_content.append(line)
 
-        all_content = pdf_with_no_tables_scraper(raw_content)
+        all_content = pdf_with_no_tables_scraper(raw_content, cod)
 
     # pdf with only 1 page
     elif len(pdf_file.pages) == 1:
@@ -66,7 +66,7 @@ def raw_data_from_tables(fis_pdf):
         print('PDF with more then 3 pages')
         pass
 
-    return all_content
+    return all_content, cod
 
 
 def create_csv_file(pdf_name, extracted_data):

@@ -2,7 +2,7 @@ import textwrap
 from helpers import disqualification_check
 
 
-def pdf_with_no_tables_scraper(row_data):
+def pdf_with_no_tables_scraper(row_data, cod):
     """
     Pdfs database contains exceptions where pdfplumber cannot find the table. The function takes row data and organizes
     data into rows of information formatted in csv.
@@ -11,16 +11,20 @@ def pdf_with_no_tables_scraper(row_data):
     """
     print('pdf with no tables scraper')
 
-    for i in row_data:
-        print(i)
-
     jumpers_rows = []
+
+    """for i in row_data:
+        print(i)"""
 
     # data list length counter
     n = int(len(row_data) / 3)
 
     # jumper raw data list of lists creator
     jumper_content = []
+
+    if cod in [2019, 2021]:
+        for _ in row_data:
+            print('Pragelato Olympic, three elements in row then two after 31 place')
 
     # jumper list line creator (from raw data to csv)
     for _ in range(n):
@@ -232,6 +236,8 @@ def pdf_with_no_tables_scraper(row_data):
                            total_points, team_points, team_ranking]
 
         elif len(row[0][0].split()) == 20 or len(row[0][0].split()) == 18:
+            print(row[0][0].split())
+            print()
             ranking = row[1][0].split()[0].replace('.', '')
             name = ' '.join(row[0][0].split()[:-16]).title()
             nationality = row[0][0].split()[-16]
@@ -312,9 +318,10 @@ def pdf_with_no_tables_scraper(row_data):
                            total_points, team_points, team_ranking]
 
         else:
+
             # clear 'Man of the Day' from row
-            if row[0][0].split()[0] == 'Man':
-                row = [[' '.join(row[0][0].split()[2:])], row[1], [' '.join(row[2][0].split()[2:])]]
+            """if row[0][0].split()[0] == 'Man':
+                row = [[' '.join(row[0][0].split()[2:])], row[1], [' '.join(row[2][0].split()[2:])]]"""
 
             ranking = row[1][0].split()[0].replace('.', '')
             name = ' '.join(row[0][0].split()[:-12]).title()
@@ -346,6 +353,7 @@ def pdf_with_no_tables_scraper(row_data):
             ranking_jump_1 = row[0][0].split()[-1].replace('.', '')
 
             if len(row[2][0].split()) > 11:
+
                 club = ' '.join(row[2][0].split()[:-14])
                 date_list = row[2][0].split()[-14:-11]
                 dob = ' '.join(date_list)
@@ -366,7 +374,8 @@ def pdf_with_no_tables_scraper(row_data):
                 distance_points_2 = row[2][0].split()[-9]
 
             else:
-                club = ' '.join(row[2][0].split())
+
+                club = ' '.join(row[2][0].split()[:-3])
                 date_list = row[2][0].split()[-3:]
                 dob = ' '.join(date_list)
 
