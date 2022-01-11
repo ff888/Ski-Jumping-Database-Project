@@ -33,6 +33,8 @@ Ready for:
     [yes] Web scraper for team competition before 2002.
 
     [no] Pdf scraper for individual competition starts from 2002.
+      - [yes] tabular pdf scraper for individuals
+      - [no] text pdf scraper for individuals
 
     [no] Pdf scraper for team competition starts from 2002.
 
