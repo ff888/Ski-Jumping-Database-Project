@@ -2,6 +2,7 @@ import pdfplumber
 import csv
 
 from pdf_data_converter import pdf_with_no_tables_scraper, table_scraper_individual
+from helpers import clear_tables
 from VAR import HEADERS
 
 
@@ -15,7 +16,7 @@ def raw_data_from_tables(fis_pdf):
     # helpers lists to handle data
     content_for_list = []
     content_for_text = []
-    table_raw_content_list = []
+    extracted_data = []
 
     fis_pdf = fis_pdf + '.pdf'
 
@@ -37,38 +38,14 @@ def raw_data_from_tables(fis_pdf):
             print('pdf with text')
             content_for_text.append(page.extract_text())
 
-    # clean rows for pdfs with tables
-    data_to_skip = ['Jury', 'RACE', 'Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Code', 'PRAG', 'NOC ',
-                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ']
+    # data from tables
+    cleared_data_tables = clear_tables(content_for_list)
+    csv_data = table_scraper_individual(cleared_data_tables)
 
-    data_to_skip = list(x.lower() for x in data_to_skip)
+    for row in csv_data:
+        extracted_data.append(row)
 
-    for lines in content_for_list:
-        for line in lines:
-            for row in line:
-
-                if row[0] is None:
-                    continue
-                if row[0][0:4].lower() in data_to_skip:
-                    continue
-                if row[0] in ['Weather Information', 'Statistics', '1st Round', 'Did Not Start', 'Qualification']:
-                    break
-                if row[0][0:18] == 'Technical Delegate':
-                    break
-                if row[0][0:4] == 'NOTE':
-                    break
-
-                # DSQ row have to handle
-                if row[0] == '' or row[0].split()[0] in ['DNS', 'DSQ']:
-                    continue
-                if 'SCE 4' in row or 'ICR' in row[2] or 'SCE' in row[2]:
-                    continue
-
-                table_raw_content_list.append(row)
-
-    tables_extracted_to_csv_list = table_scraper_individual(table_raw_content_list)
-
-    return tables_extracted_to_csv_list
+    return extracted_data
 
 
 def create_csv_file_from_pdf_data(pdf_name, extracted_data):

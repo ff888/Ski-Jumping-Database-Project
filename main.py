@@ -10,7 +10,7 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in all_cods:
+    for cod in ALL_CODEX:
         print()
         print(cod)
 

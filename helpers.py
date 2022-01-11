@@ -182,4 +182,35 @@ def clear_tables(data):
     :param data: raw data from the pdf tables
     :return: cleared raw data
     """
-    pass
+
+    table_raw_content_list = []
+
+    # clean rows for pdfs with tables
+    data_to_skip = ['Jury', 'RACE', 'Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Code', 'PRAG', 'NOC ',
+                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ']
+
+    data_to_skip = list(x.lower() for x in data_to_skip)
+
+    for lines in data:
+        for line in lines:
+            for row in line:
+                if row[0] is None:
+                    continue
+                if row[0][0:4].lower() in data_to_skip:
+                    continue
+                if row[0] in ['Weather Information', 'Statistics', '1st Round', 'Did Not Start', 'Qualification']:
+                    break
+                if row[0][0:18] == 'Technical Delegate':
+                    break
+                if row[0][0:4] == 'NOTE':
+                    break
+
+                # DSQ row have to handle
+                if row[0] == '' or row[0].split()[0] in ['DNS', 'DSQ']:
+                    continue
+                if 'SCE 4' in row or 'ICR' in row[2] or 'SCE' in row[2]:
+                    continue
+
+                table_raw_content_list.append(row)
+
+    return table_raw_content_list

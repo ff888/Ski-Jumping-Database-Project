@@ -139,6 +139,12 @@ def table_scraper_individual(raw_data):
             dob = 'NULL'
             club = 'NULL'
 
+        if row[1].split()[-2] == months:
+            if row[1].split()[-4] == nationality:
+                club = 'NULL'
+        if club == '':
+            club = 'NULL'
+
         # skip 'Man of the Day'
         if club[0:3] in ['the', 'Day']:
             club = club[4:]
