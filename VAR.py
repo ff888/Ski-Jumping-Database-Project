@@ -7,6 +7,24 @@ HEADERS = ['RANKING', 'NAME', 'NATIONALITY', 'DOB', 'CLUB', 'DISTANCE JUMP 1', '
            'GATE JUMP 2', 'GATE COMPENSATION JUMP 2', 'WIND JUMP 2', 'WIND COMPENSATION JUMP 2', 'TOTAL POINTS JUMP 2',
            'RANKING JUMP 2', 'TOTAL POINTS', 'TEAM POINTS', 'TEAM RANKING']
 
+nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'ARG', 'ARM', 'ABW', 'AUS', 'AUT', 'AZE',
+               'BHR', 'BGD', 'BRB', 'BLR', 'BEL', 'BLZ', 'BEN', 'BMU', 'BTN', 'BOL', 'BES', 'BIH', 'BWA', 'BVT', 'BRA',
+               'IOT', 'BRN', 'BGR', 'BFA', 'BDI', 'CPV', 'KHM', 'CMR', 'CAN', 'CYM', 'CAF', 'TCD', 'CHL', 'CHN', 'CXR',
+               'CCK', 'COL', 'COM', 'COD', 'COG', 'COK', 'CRI', 'HRV', 'CUB', 'CUW', 'CYP', 'CZE', 'CIV', 'DNK', 'DJI',
+               'DMA', 'DOM', 'ECU', 'EGY', 'SLV', 'GNQ', 'ERI', 'EST', 'SWZ', 'ETH', 'FLK', 'FRO', 'FJI', 'FIN', 'FRA',
+               'GUF', 'PYF', 'ATF', 'GAB', 'GMB', 'GEO', 'DEU', 'GHA', 'GIB', 'GRC', 'GRL', 'GRD', 'GLP', 'GUM', 'GTM',
+               'GGY', 'GIN', 'GNB', 'GUY', 'HTI', 'HMD', 'VAT', 'HND', 'HKG', 'HUN', 'ISL', 'IND', 'IDN', 'IRN', 'IRQ',
+               'IRL', 'IMN', 'ISR', 'ITA', 'JAM', 'JPN', 'JEY', 'JOR', 'KAZ', 'KEN', 'KIR', 'PRK', 'KOR', 'KWT', 'KGZ',
+               'LAO', 'LVA', 'LBN', 'LSO', 'LBR', 'LBY', 'LIE', 'LTU', 'LUX', 'MAC', 'MDG', 'MWI', 'MYS', 'MDV', 'MLI',
+               'MLT', 'MHL', 'MTQ', 'MRT', 'MUS', 'MYT', 'MEX', 'FSM', 'MDA', 'MCO', 'MNG', 'MNE', 'MSR', 'MOZ',
+               'MMR', 'NAM', 'NRU', 'NPL', 'NLD', 'NCL', 'NZL', 'NIC', 'NER', 'NGA', 'NIU', 'NFK', 'MNP', 'NOR', 'OMN',
+               'PAK', 'PLW', 'PSE', 'PAN', 'PNG', 'PRY', 'PER', 'PHL', 'PCN', 'POL', 'PRT', 'PRI', 'QAT', 'MKD', 'ROU',
+               'RUS', 'RWA', 'REU', 'BLM', 'SHN', 'KNA', 'LCA', 'MAF', 'SPM', 'VCT', 'WSM', 'SMR', 'STP', 'SAU', 'SEN',
+               'SRB', 'SYC', 'SLE', 'SGP', 'SXM', 'SVK', 'SVN', 'SLB', 'SOM', 'ZAF', 'SGS', 'SSD', 'ESP', 'LKA', 'SDN',
+               'SUR', 'SJM', 'SWE', 'CHE', 'SYR', 'TWN', 'TJK', 'TZA', 'THA', 'TLS', 'TGO', 'TKL', 'TON', 'TTO', 'TUN',
+               'TUR', 'TKM', 'TCA', 'TUV', 'UGA', 'UKR', 'ARE', 'GBR', 'UMI', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM',
+               'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL']
+
 
 ranking = 'NULL'
 name = 'NULL'
@@ -46,63 +64,6 @@ ranking_jump_2 = 'NULL'
 total_points = 'NULL'
 team_points = 'NULL'
 team_ranking = 'NULL'
-
-
-""" no tables 2854
-ranking = row_data[1][0].split()[0].replace('.', '')
-        name = ' '.join(row_data[0][0].split()[:-16]).title()
-        nationality = row_data[0][0].split()[-16]
-        dob = ' '.join(row_data[2][0].split()[-18:-15])
-        club = ' '.join(row_data[2][0].split()[:-18]).title()
-
-        distance_jump_1 = row_data[0][0].split()[-14]
-        distance_points_1 = row_data[0][0].split()[-13]
-        speed_jump_1 = row_data[0][0].split()[-15]
-        judge_marks_jump_1a = row_data[0][0].split()[-12]
-        judge_marks_jump_1b = row_data[0][0].split()[-11]
-        judge_marks_jump_1c = row_data[0][0].split()[-10]
-        judge_marks_jump_1d = row_data[0][0].split()[-9]
-        judge_marks_jump_1e = row_data[0][0].split()[-8]
-        judge_total_points_1 = row_data[0][0].split()[-7]
-        gate_jump_1 = row_data[0][0].split()[-6]
-        gate_compensation_1 = row_data[0][0].split()[-5]
-        wind_jump_1 = row_data[0][0].split()[-4]
-        wind_compensation_1 = row_data[0][0].split()[-3]
-        total_points_jump_1 = row_data[0][0].split()[-2]
-        ranking_jump_1 = row_data[0][0].split()[-1].replace('.', ' ')
-
-        distance_jump_2 = row_data[2][0].split()[-14]
-        distance_points_2 = row_data[2][0].split()[-13]
-        speed_jump_2 = row_data[2][0].split()[-15]
-        judge_marks_jump_2a = row_data[2][0].split()[-12]
-        judge_marks_jump_2b = row_data[2][0].split()[-11]
-        judge_marks_jump_2c = row_data[2][0].split()[-10]
-        judge_marks_jump_2d = row_data[2][0].split()[-9]
-        judge_marks_jump_2e = row_data[2][0].split()[-8]
-        judge_total_points_2 = row_data[2][0].split()[-7]
-        gate_jump_2 = row_data[2][0].split()[-6]
-        gate_compensation_2 = row_data[2][0].split()[-5]
-        wind_jump_2 = row_data[2][0].split()[-4]
-        wind_compensation_2 = row_data[2][0].split()[-3]
-        total_points_jump_2 = row_data[2][0].split()[-2]
-        ranking_jump_2 = row_data[2][0].split()[-1]
-
-        total_points = row_data[1][0].split()[-1]
-
-        team_points = 'NULL'
-        team_ranking = 'NULL'
-
-        jumper_line = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1,
-                       speed_jump_1, judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c,
-                       judge_marks_jump_1d, judge_marks_jump_1e, judge_total_points_1, gate_jump_1,
-                       gate_compensation_1, wind_jump_1, wind_compensation_1, total_points_jump_1,
-                       ranking_jump_1, distance_jump_2, distance_points_2, speed_jump_2,
-                       judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
-                       judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2,
-                       wind_jump_2, wind_compensation_2, total_points_jump_2, ranking_jump_2,
-                       total_points, team_points, team_ranking]
-"""
-
 
 
 # 923 individual tournaments
