@@ -2,7 +2,7 @@ import textwrap
 from VAR import nation_list
 
 
-def pdf_with_no_tables_scraper(row_data, cod):
+def pdf_with_no_tables_scraper(row_data):
     """
     Pdfs database contains exceptions where pdfplumber cannot find the table. The function takes row data and organizes
     data into rows of information formatted in csv.

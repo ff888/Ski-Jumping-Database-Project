@@ -65,6 +65,8 @@ total_points = 'NULL'
 team_points = 'NULL'
 team_ranking = 'NULL'
 
+# all website codex
+all_cods = range(0, 10000)
 
 # 923 individual tournaments
 CODEX_INDIVIDUAL = [961, 978, 979, 982, 989, 990, 1014, 1016, 1050, 1051, 1068, 1070, 1075, 1078, 1093, 1094, 1095,

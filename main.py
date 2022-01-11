@@ -1,16 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
-from VAR import CODEX_INDIVIDUAL, CODEX_TEAM
-from pdf_scraper import raw_data_from_tables, create_csv_file
+
+from VAR import *
+from pdf_scraper import raw_data_from_tables, create_csv_file_from_pdf_data
 from helpers import file_name_creator, download_pdf
-from web_scraper import individual_tournament_data_scraper,\
-    save_into_csv_file, team_tournament_data_scraper
+from web_scraper import individual_tournament_web_data_scraper,\
+    save_into_csv_file_web, team_tournament_web_data_scraper
 from pdf_data_converter import table_scraper_individual
 from db_create_and_save import creating_db
-
-
-# range(1093, 6277)
-all_cods = range(0, 10000)
 
 
 def main():
@@ -39,6 +36,8 @@ def main():
             # check for invalid competition city name and skip it
             if soup.h1.text in ('Four Hills Tournament (FIS)', 'Raw Air Tournament (FIS)', 'Russia Blue Bird (FIS)',
                                 'Russia Blue Bird Tournament (FIS)'):
+                continue
+            if soup.h1.text is None:
                 continue
 
             try:
@@ -70,7 +69,13 @@ def main():
                         download_pdf(soup, file_name)
 
                         # unpack tabular data
-                        raw_data_from_tables(file_name)
+                        data = raw_data_from_tables(file_name)
+
+                        # save data into csv file
+                        create_csv_file_from_pdf_data(file_name, data)
+
+                        # save into DB
+                        creating_db(PATH)
 
                     # for team and mixed competition 2002 and after (pdfs)
                     elif file_name[-1] == 'T' or file_name[-1] == 'X':
@@ -85,8 +90,8 @@ def main():
                         print('Individual WEB')
 
                         # save csv file
-                        data = individual_tournament_data_scraper(soup)
-                        save_into_csv_file(data, file_name)
+                        data = individual_tournament_web_data_scraper(soup)
+                        save_into_csv_file_web(data, file_name)
                         creating_db(PATH)
 
                     # for Team or Mixed (web)
@@ -94,8 +99,8 @@ def main():
                         print('Team WEB')
 
                         # save csv file
-                        data = team_tournament_data_scraper(soup)
-                        save_into_csv_file(data, file_name)
+                        data = team_tournament_web_data_scraper(soup)
+                        save_into_csv_file_web(data, file_name)
                         creating_db(PATH)
 
 
