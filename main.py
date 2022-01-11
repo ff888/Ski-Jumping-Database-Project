@@ -6,7 +6,6 @@ from pdf_scraper import raw_data_from_tables, create_csv_file_from_pdf_data
 from helpers import file_name_creator, download_pdf
 from web_scraper import individual_tournament_web_data_scraper,\
     save_into_csv_file_web, team_tournament_web_data_scraper
-from pdf_data_converter import table_scraper_individual
 from db_create_and_save import creating_db
 
 

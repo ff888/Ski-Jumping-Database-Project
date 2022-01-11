@@ -1,4 +1,3 @@
-import textwrap
 from VAR import nation_list
 
 

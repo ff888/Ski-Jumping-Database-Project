@@ -1,8 +1,9 @@
 import csv
+
 from VAR import HEADERS
 
 
-def individual_tournament_data_scraper(soup):
+def individual_tournament_web_data_scraper(soup):
     """
     Scraps information from fis-website for individual tournament only.
     :param soup: BeautifulSoup object representing fis-web structure.
@@ -40,7 +41,7 @@ def individual_tournament_data_scraper(soup):
     return rows
 
 
-def team_tournament_data_scraper(soup):
+def team_tournament_web_data_scraper(soup):
     """
     Scraps information from fis-website for team tournament only.
     :param soup: BeautifulSoup object representing fis-web structure.
@@ -99,7 +100,7 @@ def team_tournament_data_scraper(soup):
     return rows
 
 
-def save_into_csv_file(data, file_name):
+def save_into_csv_file_web(data, file_name):
     """
     Creates csv file using date scraped from fis-webs and saves into csv file.
     :param data: list of tuples (individual_tournament_data_scraper)
@@ -147,6 +148,7 @@ def save_into_csv_file(data, file_name):
         team_ranking = 'NULL'
 
         for line in data:
+
             ranking = line[0]
             name = line[1]
             nationality = line[2]
