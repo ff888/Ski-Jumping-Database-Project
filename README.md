@@ -139,7 +139,8 @@ File name structure:
 
 See example below:
 
-![name example.png](photos/name example.png)
+### 1985-01-04_Innsbruck(AUT)_(471)_WC_LH_M_I
+
 
 Where:
 
