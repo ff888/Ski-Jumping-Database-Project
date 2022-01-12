@@ -141,7 +141,7 @@ File name structure:
 
 See example below:
 
-![file name example.png](photos/file name example.png)
+![name example.png](photos/name example.png)
 
 Where:
 
