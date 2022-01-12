@@ -33,7 +33,6 @@ def raw_data_from_tables(fis_pdf):
             content_for_list.append(page.extract_tables())
 
         else:
-
             # unpack pdfs with text
             print('pdf with text')
             content_for_text.append(page.extract_text())

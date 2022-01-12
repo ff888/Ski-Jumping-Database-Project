@@ -13,6 +13,9 @@ def file_name_creator(soup):
     # city name where the tournament held
     city = soup.h1.text.replace(' ', '').replace('/', '')
 
+    if ',' in city:
+        city = city.split(',')[0] + city.split(',')[1][2:]
+
     # gender and type of tournament check
     info_line = soup.find('div', class_='event-header__kind').text
 
@@ -41,7 +44,7 @@ def file_name_creator(soup):
         hill = 'NH'
     elif 'Large Hill' in info_line:
         hill = 'LH'
-    elif 'Flying Hill' in info_line:
+    elif 'Flying Hill' in info_line or "Men's Team Flying H." in info_line:
         hill = 'SF'
     else:
         if info_line.split()[-1][0] == 'K':
