@@ -139,7 +139,7 @@ File name structure:
 
 See example below:
 
-### 1985-01-04_Innsbruck(AUT)_(471)_WC_LH_M_I
+> ### 1985-01-04_Innsbruck(AUT)_(471)_WC_LH_M_I
 
 
 Where:
@@ -148,7 +148,7 @@ Element 1: 1985-01-04 -  date formatted YYYY-mm-dd
 
 Element 2: Innsbruck(AUT) - city(NATIONALITY)
 
-Element 4: (3278) - codex (fis website cod specification)
+Element 4: (471) - codex (fis website cod specification)
 
 Element 3: WC - tournament type 
 - OL = Olympics
