@@ -42,19 +42,20 @@ Ready for:
 
 ## ***_Purpose of the app_***
 
-A hundred years of the ski jumping history in ONE CLICK!
+A hundred years of the ski jumping history on ONE CLICK!
 
 Please note a hundred years of ski jumping is long time, this means thousands of different types of tournaments 
-(World Cup, Olympic, Team, Individual, Man, Woman, Mixed). Over the years, this discipline has changed a lot, 
-this app covers all these changes. 
+(World Cup, Olympic, Team, Individual, Man, Woman, Mixed). Over the years, this discipline has changed a lot, the way how this sports is show now is much different then 20-30 years ago, 
+but also technology and how data is store change a lot. This app covers all these changes. 
 
 The goal of the app is to create a database with information about all senior ski jumping tournaments that happened over a hundred years of ski jumping history.
-To achieve it the program has scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web see "How it's works" section). 
+To achieve it the program has scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web go to "How it's works" section). 
 
 The program is pulling the data for each tournament and creates csv files (see the "About CSV file Structure" section).
 Creates unique file name (see the "About file name structure" section) and saves it in proper place in a database according to gender, tournament type, season. To find and manage it easy. 
 
-
+Is worth to mention that fis.com data is not complete, especially old tournaments where there is lack of detailed data. 
+If you have access to historical ski jumping data please share it with me I will add it to DB.
 ___
 
 ## ***_How it's works_***
@@ -73,6 +74,8 @@ To scrape data from valid website program is using few different techniques.
    - Until 2002 all information are hold on websites.
    To pull data app uses BeautifulSoup4 library.
    (data is not as detailed as 2002 and after all empty spaces are replaced by NULL value).
+     
+![web to csv example.png](photos/web to csv example.png)
    
 
 2. PDF 
@@ -80,6 +83,8 @@ To scrape data from valid website program is using few different techniques.
    - From 2002 fis starts save competition data in the pdf files (data here is more detailed).
    First pdf is downloaded then app pulls data using pdfplumber library.
    There are many variants of pdfs here and each variant has to be treated individually.
+     
+![pdf to csv example.png](photos/pdf to csv example.png)
    
      
 
@@ -94,14 +99,14 @@ Database is built with 5 steps by access to different elements of the file name:
    
    
 2. Second directory is tournament type (Grand Prix, Olympics, World Cup or World Championship) 
-   and creates dir with the same name.
+   and creates a directory with the same name.
    
    
 3. A third dir is Individual or Team competition.
 
 
-4. Four dir is season date, season function is checking the date of file name and according to it its creates a season
-   name, and the dir with the same name.
+4. Four directory is season date, season function is checking the date of file name and according to it its creates a season
+   name, and the directory with the same name.
 
 
 5. Finally, it saves the file in season dir.
@@ -114,7 +119,7 @@ See picture below:
 
 ## ***_About CSV file structure_***
 
-Each file has the same structure and is csv tabular type of file.
+Each file has the same structure - csv tabular type of file.
 
 There are 33 columns with all tournament data like ranking, name, speed, distance, points etc.
 
@@ -132,25 +137,27 @@ this way is easy to find the file and manage it.
 
 File name structure:
 
-> YYYY-mm-dd_city(country)_tournament type_hill size_gender_individual or team.csv
+> YYYY-mm-dd_city(country)_(codex)_tournament type_hill size_gender_individual or team.csv
 
 See example below:
 
-![File name example](photos/File%20name%20example.png)
+![name example.png](photos/name example.png)
 
 Where:
 
-Element 1: 1998-02-11 -  date formatted YYYY-mm-dd 
+Element 1: 1985-01-04 -  date formatted YYYY-mm-dd 
 
-Element 2: Nagano(JAP) - city(NATIONALITY)
+Element 2: Innsbruck(AUT) - city(NATIONALITY)
 
-Element 3: OL - tournament type 
+Element 4: (3278) - codex (fis website cod specification)
+
+Element 3: WC - tournament type 
 - OL = Olympics
 - WC = World Cup
 - GP = Grand Prix
 - CH = World Championship 
         
-Element 4: NH - hill size
+Element 4: LH - hill size
 - NH = Normal Hill
 - LH = Large Hill
 - SF = Flying Hill
