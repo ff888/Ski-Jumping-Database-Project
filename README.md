@@ -75,7 +75,6 @@ To scrape data from valid website program is using few different techniques.
    To pull data app uses BeautifulSoup4 library.
    (data is not as detailed as 2002 and after all empty spaces are replaced by NULL value).
      
-![web to csv example.png](photos/web to csv example.png)
    
 
 2. PDF 
@@ -84,7 +83,6 @@ To scrape data from valid website program is using few different techniques.
    First pdf is downloaded then app pulls data using pdfplumber library.
    There are many variants of pdfs here and each variant has to be treated individually.
      
-![pdf to csv example.png](photos/pdf to csv example.png)
    
      
 
