@@ -2,7 +2,7 @@ import datetime as dt
 import requests
 
 
-def file_name_creator(soup):
+def file_name_creator(soup, cod):
     """
     Function checks fis web and creates a file name using scraped information from there.
     Name structure: Year-Month-Day_City_TournamentType_HillSize_Gender_Team/Individual (2018-Mar-25_Oberstdorf(GER)_WC_NH_W_I)
@@ -103,7 +103,7 @@ def file_name_creator(soup):
     date_to_format = year + '-' + month + '-' + day
     date = dt.datetime.strptime(date_to_format, '%Y-%b-%d').date()
 
-    new_file_name = f'{date}_{city}_{short_tournament_type}_{hill}_{gender}_{team_or_ind}'
+    new_file_name = f'{date}_{city}_({cod})_{short_tournament_type}_{hill}_{gender}_{team_or_ind}'
 
     return new_file_name
 

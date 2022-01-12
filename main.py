@@ -49,7 +49,7 @@ def main():
             except AttributeError:
                 pass
 
-            file_name = file_name_creator(soup)
+            file_name = file_name_creator(soup, cod)
             print(file_name)
 
             # check only for World Cap/Grand Prix/Olympic/World Championship skip the rest.
