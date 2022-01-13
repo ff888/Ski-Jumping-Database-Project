@@ -1,16 +1,20 @@
 import requests
-from bs4 import BeautifulSoup
+import pdfplumber
 
+from bs4 import BeautifulSoup
 from VAR import *
-from pdf_scraper import raw_data_from_tables, create_csv_file_from_pdf_data
+from pdf_scraper import raw_data_from_pdfs, create_csv_file_from_pdf_data
 from helpers import file_name_creator, download_pdf
 from web_scraper import individual_tournament_web_data_scraper,\
     save_into_csv_file_web, team_tournament_web_data_scraper
 from db_create_and_save import creating_db
 
 
+text_list = range(1874, 6500)
+
+
 def main():
-    for cod in [701]:
+    for cod in TEXT_PDFS:
         print()
         print(cod)
 
@@ -68,7 +72,7 @@ def main():
                         download_pdf(soup, file_name)
 
                         # unpack tabular data
-                        data = raw_data_from_tables(file_name)
+                        data = raw_data_from_pdfs(file_name)
 
                         # save data into csv file
                         create_csv_file_from_pdf_data(file_name, data)
@@ -105,3 +109,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+print(text_pdfs_list)

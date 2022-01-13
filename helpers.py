@@ -217,3 +217,33 @@ def clear_tables(data):
                 table_raw_content_list.append(row)
 
     return table_raw_content_list
+
+
+def clear_text(data):
+    """
+
+
+    :param data:
+    :return:
+    """
+
+    table_raw_content_list = []
+
+    # clean rows for pdfs with tables
+    data_to_skip = ['Jury', 'RACE', 'Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Code', 'PRAG', 'NOC ', 'Did ',
+                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ', 'Chie', 'Tech', 'Assi']
+
+    data_to_skip = list(x.lower() for x in data_to_skip)
+
+    # skip not valid row
+    for rows in data:
+        for row in rows:
+            if row[0:4].lower() in data_to_skip:
+                continue
+            if row.split()[0] in ['Weather', 'FIS', 'Air', 'Report:']:
+                break
+            if row.split()[1] in ['Print'] and row.split()[-4] == 'Page':
+                break
+
+
+
