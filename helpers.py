@@ -227,11 +227,12 @@ def clear_text(data):
     :return:
     """
 
-    table_raw_content_list = []
+    raw_content_list = []
 
     # clean rows for pdfs with tables
     data_to_skip = ['Jury', 'RACE', 'Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Code', 'PRAG', 'NOC ', 'Did ',
-                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ', 'Chie', 'Tech', 'Assi']
+                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ', 'Chie', 'Tech', 'Assi',
+                    'Equi', '1st ', 'www.']
 
     data_to_skip = list(x.lower() for x in data_to_skip)
 
@@ -240,10 +241,12 @@ def clear_text(data):
         for row in rows:
             if row[0:4].lower() in data_to_skip:
                 continue
-            if row.split()[0] in ['Weather', 'FIS', 'Air', 'Report:']:
+            if row[0] == '(' and row[-1] == ')':
+                continue
+            if row.split()[0] in ['Weather', 'FIS', 'Air', 'Report:', 'www.fis-', 'Statistics', 'Reason', 'Temp.[°C]',
+                                  'ICR', 'Base']:
                 break
-            if row.split()[1] in ['Print'] and row.split()[-4] == 'Page':
-                break
+            if row.split()[0][0:3] == 'SJM':
+                continue
 
-
-
+            raw_content_list.append(row)
