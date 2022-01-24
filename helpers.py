@@ -1,5 +1,7 @@
 import datetime as dt
 import requests
+import itertools
+
 
 
 def file_name_creator(soup, cod):
@@ -236,12 +238,12 @@ def clear_text(data):
 
     data_to_skip = list(x.lower() for x in data_to_skip)
 
-    # skip not valid row
+    # skip not valid rows
     for rows in data:
         for row in rows:
             if row[0:4].lower() in data_to_skip:
                 continue
-            if row[0] == '(' and row[-1] == ')':
+            if row[0] == '(' and row[-1] == ')' or row == 'SC BACHMAYER Johann (AUT)':
                 continue
             if row.split()[0] in ['Weather', 'FIS', 'Air', 'Report:', 'www.fis-', 'Statistics', 'Reason', 'Temp.[°C]',
                                   'ICR', 'Base']:
@@ -250,3 +252,17 @@ def clear_text(data):
                 continue
 
             raw_content_list.append(row)
+
+    # create jumper list
+    line_1 = raw_content_list[::3]
+    line_2 = raw_content_list[1::3]
+    line_3 = raw_content_list[2::3]
+
+    rows_tuples = list(zip(line_1, line_2, line_3))
+    rows_lists = []
+
+    for row in rows_tuples:
+        rows_lists.append(list(row))
+
+    return rows_lists
+

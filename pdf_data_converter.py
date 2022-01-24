@@ -1,7 +1,7 @@
 from VAR import nation_list
 
 
-def pdf_with_no_tables_scraper(row_data):
+def text_pdfs_scraper_individual(row_data):
     """
     Pdfs database contains exceptions where pdfplumber cannot find the table. The function takes row data and organizes
     data into rows of information formatted in csv.
@@ -10,10 +10,38 @@ def pdf_with_no_tables_scraper(row_data):
     """
     print('pdf with no tables scraper')
 
-    pass
+    for row in row_data:
+        print(row)
+        print(row[0])
+
+        # reorganise row structure to be consistent
+        if row[0].split()[0][0].isupper() is False:
+            row = [row[2] + ', ' + row[0] + ', ' + row[1]]
+
+        # get jumper name, nationality, club
+        # get specification of nationality index
+        for i in row[0].split():
+            if i in nation_list:
+                nationality_index = row[0].split().index(i)
+
+        # get nationality
+        nationality = row[0].split()[nationality_index]
+
+        # get name
+        name = ' '.join(row[0].split()[0:nationality_index]).title().replace('.', '')
+
+        # clear name data
+        if name.split()[0] == 'Man':
+            name = ' '.join(name.split()[2:])
+
+        elif name.split()[0] == '*':
+            name = ' '.join(name.split()[1:])
+
+        print(name, '...........',  nationality)
+        print()
 
 
-def table_scraper_individual(raw_data):
+def table_pdfs_scraper_individual(raw_data):
     """
     Function takes row data from pdfs tables and converts it to csv.
     :param raw_data: data from pdf tables extracted by pdfplumber

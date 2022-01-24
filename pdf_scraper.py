@@ -1,7 +1,7 @@
 import pdfplumber
 import csv
 
-from pdf_data_converter import pdf_with_no_tables_scraper, table_scraper_individual
+from pdf_data_converter import text_pdfs_scraper_individual, table_pdfs_scraper_individual
 from helpers import clear_tables, clear_text
 from VAR import HEADERS
 
@@ -40,13 +40,17 @@ def raw_data_from_pdfs(fis_pdf):
 
     # data from tables-pdfs
     cleared_data_tables = clear_tables(content_for_list)
-    csv_data = table_scraper_individual(cleared_data_tables)
+    csv_data_table = table_pdfs_scraper_individual(cleared_data_tables)
 
-    for row in csv_data:
+    for row in csv_data_table:
         extracted_data.append(row)
 
     # data from text-pdfs
     cleared_data_text = clear_text(content_for_text)
+    csv_data_text = text_pdfs_scraper_individual(cleared_data_text)
+
+    """for row in csv_data_text:
+        extracted_data.append(row)"""
 
     return extracted_data
 
