@@ -12,7 +12,7 @@
 
 >_Hello!_
 >
->_This is my first python project, the first step into programming. My "Hello World!" as a developer. Therefore, any help, ideas, constructive criticism or cooperation is very much appreciated._
+>_This is my first python project, the first step into programming. My "Hello World!" as a developer. Therefore, any help, ideas, constructive feedback or cooperation is very much appreciated._
 >
 >_All the best,_
 > 
@@ -49,13 +49,13 @@ Please note a hundred years of ski jumping is long time, this means thousands of
 but also technology and how data is store change a lot. This app covers all these changes. 
 
 The goal of the app is to create a database with information about all senior ski jumping tournaments that happened over a hundred years of ski jumping history.
-To achieve it the program has scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web go to "How it's works" section). 
+To achieve this goal, the program has scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web go to "How it's works" section). 
 
 The program is pulling the data for each tournament and creates csv files (see the "About CSV file Structure" section).
-Creates unique file name (see the "About file name structure" section) and saves it in proper place in a database according to gender, tournament type, season. To find and manage it easy. 
+Creates unique file name (see the "About file name structure" section) and saves it in proper place in a database according to gender, tournament type, season. All to find and manage it easy. 
 
-Is worth to mention that fis.com data is not complete, especially old tournaments where there is lack of detailed data. 
-If you have access to historical ski jumping data please share it with me I will add it to DB.
+Is worth to mention that fis.com database is not complete, especially records before 2002, where there is lack of detailed data. 
+If you have access to historical ski jumping data records please share it with me I will add it to DB.
 ___
 
 ## ***_How it's works_***
@@ -90,7 +90,8 @@ To scrape data from valid website program is using few different techniques.
 
 ## ***_About DataBase structure_***
 
-Database is built with 5 steps by access to different elements of the file name:
+Database is built by pulling information from the file name (is accessing 5 different "file name" elements and on this basis it places
+the files in the appropriate sections of DB):
 
 1. First step is to access gender element in the file name and creates a proper dir 
    (Man, Women or Mixed).
@@ -164,7 +165,7 @@ Element 4: LH - hill size
 Element 5: M - gender
 - M = Man 
 - W = Woman
-- M = Mixed
+- X = Mixed
 
 Element 6: I - Individual or Team competition
 - I = Individual
@@ -188,7 +189,7 @@ Thanks to that is easy to find and access a file or group of files using differe
 
 ---
 
-## ***_Contributors_***
+## ***_Contributor_***
 
 _Jakub Krajewski_ ( jakub.j.krajewski@gmail.com )
 
