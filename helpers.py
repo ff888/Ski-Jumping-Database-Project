@@ -248,6 +248,8 @@ def clear_text(data):
             if row.split()[0] in ['Weather', 'FIS', 'Air', 'Report:', 'www.fis-', 'Statistics', 'Reason', 'Temp.[°C]',
                                   'ICR', 'Base']:
                 break
+            if row.split()[1] == 'Report':
+                continue
             if row.split()[0][0:3] == 'SJM':
                 continue
 
