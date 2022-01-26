@@ -163,10 +163,19 @@ def download_pdf(soup, file_name):
                     f.write(pdf_link.content)
 
 
+def disqualification_row_handler(data):
+    """
+
+    :param data:
+    :return:
+    """
+    pass
+
+
 def team_points_creator():
     """
     Creates team points value by adding total points by 4 first jumpers from each nationality. If the team consists of 3
-     jumpers, her/his points are added twice. If the team consists of two or one people total_points = 'NULL'
+    jumpers, her/his points are added twice. If the team consists of two or one people total_points = 'NULL'
     :return: team_points
     """
     pass
@@ -209,7 +218,7 @@ def clear_tables(data):
                 if row[0][0:4] == 'NOTE':
                     break
 
-                # DSQ row have to handle
+                # DSQ row
                 if row[0] == '' or row[0].split()[0] in ['DNS', 'DSQ']:
                     continue
                 if 'SCE 4' in row or 'ICR' in row[2] or 'SCE' in row[2]:
@@ -251,7 +260,7 @@ def clear_text(data):
             if row.split()[0][0:3] == 'SJM':
                 continue
 
-            # DSQ row have to handle
+            # DSQ row
             if 'SCE 4' in row and 'DSQ' not in row:
                 continue
 
