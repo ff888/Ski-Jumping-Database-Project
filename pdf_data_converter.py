@@ -10,39 +10,47 @@ def text_pdfs_scraper_individual(row_data):
     """
     print('pdf with no tables scraper')
 
+    jumpers_data = []
+
     for row in row_data:
-        print(row)
-        # find if first row element includes nationality value
-        """for i in row[0].split():
+
+        # reorganise row structure to be consistent
+        for i in row[0].split():
             if i in nation_list:
-                name_ele_zero = True
-            else:
-                name_ele_zero = False"""
+                row = [row[0], row[1], row[2]]
 
         for i in row[1].split():
             if i in nation_list:
-                name_ele_one = True
-            else:
-                name_ele_one = False
+                row = [row[1], row[0], row[2]]
 
         for i in row[2].split():
             if i in nation_list:
-                name_ele_two = True
+                row = [row[2], row[0], row[1]]
+
+        # handle Man of the Day and missing data in row 1
+        if row[0].split()[0] == 'Man' and len(row[1].split()) > 3:
+            data_to_move_between_rows = row[0] + ' ' + ' '.join(row[1].split()[1:-1])
+            data_for_row_1 = ' '.join(row[1].split()[:1]) + ' ' + row[1].split()[-1]
+
+            row = [data_to_move_between_rows, data_for_row_1, row[2]]
+
+        if len(row[1].split()) == 2:
+            if row[0].split()[0] == 'Man':
+                row = [row[0][7:], row[1], row[2][8:]]
             else:
-                name_ele_two = False
+                new_row_0 = ' '.join(row[0].split()[:-1])
+                new_row_1 = row[1] + ' ' + row[0].split()[-1]
 
-        # reorganise row structure to be consistent
-        if name_ele_one:
-            row = [row[1], row[0], row[2]]
+                row = [new_row_0, new_row_1, row[2]]
 
-        elif name_ele_two:
-            row = [row[2], row[0], row[2]]
+        # move part of data from row[1] to row[0] to data to be consistent for all rows
+        if len(row[1].split()) != 3:
+            data_to_move_between_rows = row[0] + ' ' + ' '.join(row[1].split()[2:-1])
+            data_for_row_1 = ' '.join(row[1].split()[:2]) + ' ' + row[1].split()[-1]
 
-        else:
-            row = [row[0], row[1], row[2]]
+            row = [data_to_move_between_rows, data_for_row_1, row[2]]
 
         # get ranking
-        # ranking
         ranking = row[1].split()[0].replace('.', '')
 
         # get jumper name, nationality, club
@@ -71,49 +79,137 @@ def text_pdfs_scraper_individual(row_data):
             if i in months:
                 months_index = row[2].split().index(i)
 
-        dob = f'{row[2].split()[months_index - 1]} {row[2].split()[months_index]} {row[2].split()[months_index + 1]}'
+        dob = ' '.join(row[2].split()[months_index - 1:months_index + 2])
         club = ' '.join(row[2].split()[:months_index - 1])
 
-        print(ranking, name, nationality, dob, club)
+        # handle missing speed_jump_1 value
+        if len(row[0].split()[nationality_index + 1:]) == 10 or len(row[0].split()[nationality_index + 1:]) == 8:
+            speed_jump_1 = 'NULL'
+            nationality_index = nationality_index - 1
+        else:
+            speed_jump_1 = row[0].split()[nationality_index + 1]
 
-        distance_jump_1 = 'NULL'
-        distance_points_1 = 'NULL'
-        speed_jump_1 = 'NULL'
-        judge_marks_jump_1a = 'NULL'
-        judge_marks_jump_1b = 'NULL'
-        judge_marks_jump_1c = 'NULL'
-        judge_marks_jump_1d = 'NULL'
-        judge_marks_jump_1e = 'NULL'
-        judge_total_points_1 = 'NULL'
-        gate_jump_1 = 'NULL'
-        gate_compensation_1 = 'NULL'
-        wind_jump_1 = 'NULL'
-        wind_compensation_1 = 'NULL'
-        total_points_jump_1 = 'NULL'
-        ranking_jump_1 = 'NULL'
-        distance_jump_2 = 'NULL'
-        distance_points_2 = 'NULL'
-        speed_jump_2 = 'NULL'
-        judge_marks_jump_2a = 'NULL'
-        judge_marks_jump_2b = 'NULL'
-        judge_marks_jump_2c = 'NULL'
-        judge_marks_jump_2d = 'NULL'
-        judge_marks_jump_2e = 'NULL'
-        judge_total_points_2 = 'NULL'
-        gate_jump_2 = 'NULL'
-        gate_compensation_2 = 'NULL'
-        wind_jump_2 = 'NULL'
-        wind_compensation_2 = 'NULL'
-        total_points_jump_2 = 'NULL'
-        ranking_jump_2 = 'NULL'
+        # get data for first round
+        distance_jump_1 = row[0].split()[nationality_index + 2]
+        distance_points_1 = row[0].split()[nationality_index + 3]
+
+        # judge marks for first jump
+        judge_marks_jump_1a = row[0].split()[nationality_index + 4]
+        judge_marks_jump_1b = row[0].split()[nationality_index + 5]
+        judge_marks_jump_1c = row[0].split()[nationality_index + 6]
+        judge_marks_jump_1d = row[0].split()[nationality_index + 7]
+        judge_marks_jump_1e = row[0].split()[nationality_index + 8]
+
+        judge_total_points_1 = row[0].split()[nationality_index + 9]
+
+        total_points_jump_1 = row[1].split()[-1]
+        ranking_jump_1 = row[1].split()[0].replace('.', '')
+
+        # if there is disqualification in second round
+        if 'DSQ' in row[2].split():
+
+            gate_jump_1 = 'NULL'
+            gate_compensation_1 = 'NULL'
+            wind_jump_1 = 'NULL'
+            wind_compensation_1 = 'NULL'
+
+            distance_jump_2 = 'NULL'
+            distance_points_2 = 'NULL'
+            speed_jump_2 = 'NULL'
+
+            judge_marks_jump_2a = 'NULL'
+            judge_marks_jump_2b = 'NULL'
+            judge_marks_jump_2c = 'NULL'
+            judge_marks_jump_2d = 'NULL'
+            judge_marks_jump_2e = 'NULL'
+
+            judge_total_points_2 = 'NULL'
+
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+
+            total_points_jump_2 = 'NULL'
+            ranking_jump_2 = 'DSQ'
+
+        # if there is no second round
+        elif len(row[2].split()) < 10:
+
+            gate_jump_1 = 'NULL'
+            gate_compensation_1 = 'NULL'
+            wind_jump_1 = 'NULL'
+            wind_compensation_1 = 'NULL'
+
+            distance_jump_2 = 'NULL'
+            distance_points_2 = 'NULL'
+            speed_jump_2 = 'NULL'
+
+            judge_marks_jump_2a = 'NULL'
+            judge_marks_jump_2b = 'NULL'
+            judge_marks_jump_2c = 'NULL'
+            judge_marks_jump_2d = 'NULL'
+            judge_marks_jump_2e = 'NULL'
+
+            judge_total_points_2 = 'NULL'
+
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+
+            total_points_jump_2 = 'NULL'
+            ranking_jump_2 = 'NULL'
+
+        else:
+
+            # handle missing speed_jump_2 value
+            if len(row[2].split()[months_index + 2:]) == 10:
+                speed_jump_2 = 'NULL'
+                months_index = months_index - 1
+            else:
+                speed_jump_2 = row[2].split()[months_index + 2]
+
+            gate_jump_1 = 'NULL'
+            gate_compensation_1 = 'NULL'
+            wind_jump_1 = 'NULL'
+            wind_compensation_1 = 'NULL'
+
+            distance_jump_2 = row[2].split()[months_index + 3]
+            distance_points_2 = row[2].split()[months_index + 4]
+
+            judge_marks_jump_2a = row[2].split()[months_index + 5]
+            judge_marks_jump_2b = row[2].split()[months_index + 6]
+            judge_marks_jump_2c = row[2].split()[months_index + 7]
+            judge_marks_jump_2d = row[2].split()[months_index + 8]
+            judge_marks_jump_2e = row[2].split()[months_index + 9]
+
+            judge_total_points_2 = row[2].split()[months_index + 10]
+
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+
+            total_points_jump_2 = row[2].split()[months_index + 11]
+            ranking_jump_2 = row[2].split()[months_index + 12].replace('.', '')
 
         # get total points
-        # total_points = row[1].split()[-1]
+        total_points = row[1].split()[-1]
         team_points = 'NULL'
         team_ranking = 'NULL'
 
-        #print(ranking, name, nationality, dob, club, total_points)
-        print()
+        jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
+                      judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
+                      judge_marks_jump_1e, judge_total_points_1, gate_jump_1, gate_compensation_1, wind_jump_1,
+                      wind_compensation_1, total_points_jump_1, ranking_jump_1, distance_jump_2, distance_points_2,
+                      speed_jump_2, judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
+                      judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2, wind_jump_2,
+                      wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
+
+        jumpers_data.append(jumper_row)
+
+    return jumpers_data
 
 
 def table_pdfs_scraper_individual(raw_data):
@@ -441,14 +537,13 @@ def table_pdfs_scraper_individual(raw_data):
         team_ranking = 'NULL'
 
         jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
-               judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
-               judge_marks_jump_1e, judge_total_points_1, gate_jump_1, gate_compensation_1, wind_jump_1,
-               wind_compensation_1, total_points_jump_1, ranking_jump_1, distance_jump_2, distance_points_2,
-               speed_jump_2, judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
-               judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2, wind_jump_2,
-               wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
+                      judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
+                      judge_marks_jump_1e, judge_total_points_1, gate_jump_1, gate_compensation_1, wind_jump_1,
+                      wind_compensation_1, total_points_jump_1, ranking_jump_1, distance_jump_2, distance_points_2,
+                      speed_jump_2, judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
+                      judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2, wind_jump_2,
+                      wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
 
         jumpers_data.append(jumper_row)
 
     return jumpers_data
-

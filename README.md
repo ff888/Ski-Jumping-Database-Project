@@ -18,25 +18,6 @@
 > 
 >_Jakub Krajewski_
 
----
-
-Please note the app is not fully finished yet.
-
-Ready for:
-
-    [yes] File name creator.
-
-    [yes] Database builder.
-
-    [yes] Web scraper for individual competition before 2002.
-
-    [yes] Web scraper for team competition before 2002.
-
-    [no] Pdf scraper for individual competition starts from 2002.
-      - [yes] tabular pdf scraper for individuals
-      - [no] text pdf scraper for individuals
-
-    [no] Pdf scraper for team competition starts from 2002.
 
 ---
 
@@ -186,6 +167,28 @@ Thanks to that is easy to find and access a file or group of files using differe
 - [Datetime](https://docs.python.org/3/library/datetime.html "The datetime module supplies classes for manipulating dates and times.")
 - [OS](https://docs.python.org/3/library/os.html "This module provides a portable way of using operating system dependent functionality.")
 - [Shutil](https://docs.python.org/3/library/shutil.html "The shutil module offers a number of high-level operations on files and collections of files.")
+
+---
+
+
+### _Please note the app is not fully finished yet._
+
+Ready for:
+
+    [yes] File name creator.
+
+    [yes] Database builder.
+
+    [yes] Web scraper for individual competition before 2002.
+
+    [yes] Web scraper for team competition before 2002.
+
+    [yes] Pdf scraper for individual competition starts from 2002.
+      - [yes] tabular pdf scraper for individuals
+      - [yes] text pdf scraper for individuals
+
+    [no] Pdf scraper for team competition starts from 2002.
+    [no] handle disqualification rows
 
 ---
 

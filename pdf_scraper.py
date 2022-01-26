@@ -49,8 +49,8 @@ def raw_data_from_pdfs(fis_pdf):
     cleared_data_text = clear_text(content_for_text)
     csv_data_text = text_pdfs_scraper_individual(cleared_data_text)
 
-    """for row in csv_data_text:
-        extracted_data.append(row)"""
+    for row in csv_data_text:
+        extracted_data.append(row)
 
     return extracted_data
 

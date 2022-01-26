@@ -16,7 +16,7 @@ nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'A
                'GGY', 'GIN', 'GNB', 'GUY', 'HTI', 'HMD', 'VAT', 'HND', 'HKG', 'HUN', 'ISL', 'IND', 'IDN', 'IRN', 'IRQ',
                'IRL', 'IMN', 'ISR', 'ITA', 'JAM', 'JPN', 'JEY', 'JOR', 'KAZ', 'KEN', 'KIR', 'PRK', 'KOR', 'KWT', 'KGZ',
                'LAO', 'LVA', 'LBN', 'LSO', 'LBR', 'LBY', 'LIE', 'LTU', 'LUX', 'MAC', 'MDG', 'MWI', 'MYS', 'MDV', 'MLI',
-               'MLT', 'MHL', 'MTQ', 'MRT', 'MUS', 'MYT', 'MEX', 'FSM', 'MDA', 'MCO', 'MNG', 'MNE', 'MSR', 'MOZ',
+               'MLT', 'MHL', 'MTQ', 'MRT', 'MUS', 'MYT', 'MEX', 'FSM', 'MDA', 'MCO', 'MNG', 'MNE', 'MSR', 'MOZ', 'NED',
                'MMR', 'NAM', 'NRU', 'NPL', 'NLD', 'NCL', 'NZL', 'NIC', 'NER', 'NGA', 'NIU', 'NFK', 'MNP', 'NOR', 'OMN',
                'PAK', 'PLW', 'PSE', 'PAN', 'PNG', 'PRY', 'PER', 'PHL', 'PCN', 'POL', 'PRT', 'PRI', 'QAT', 'MKD', 'ROU',
                'RUS', 'RWA', 'REU', 'BLM', 'SHN', 'KNA', 'LCA', 'MAF', 'SPM', 'VCT', 'WSM', 'SMR', 'STP', 'SAU', 'SEN',
@@ -149,5 +149,3 @@ TEXT_PDFS = [1874, 1875, 1881, 1882, 1886, 1887, 1905, 1940, 1942, 1943, 1944, 1
              2543, 2544, 2545, 2546, 2547, 2550, 2551, 2553, 2555, 2557, 2559, 2560, 2561, 2563, 2565, 2569, 2571, 2572,
              2603, 2604, 2625, 2626, 2641, 2647, 2648, 2649, 2651, 2653, 2663, 2670, 2682, 2692, 2721, 2722, 2854, 2855,
              2856, 2857, 2858, 2859, 2860, 2861, 2862]
-
-text_dsq = [2551, 2550, 2546, 2563, 2603, 2604]  # skip row 'Reason'

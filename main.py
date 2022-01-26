@@ -1,5 +1,4 @@
 import requests
-import pdfplumber
 
 from bs4 import BeautifulSoup
 from VAR import *

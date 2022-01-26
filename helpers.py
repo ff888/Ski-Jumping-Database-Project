@@ -222,10 +222,9 @@ def clear_tables(data):
 
 def clear_text(data):
     """
-
-
-    :param data:
-    :return:
+    Function clears table if rows are not valid (dasen't hold jumper data).
+    :param data: raw data pulled from pdf
+    :return: list of jumpers rows
     """
 
     raw_content_list = []
