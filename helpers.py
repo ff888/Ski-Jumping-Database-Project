@@ -1,7 +1,5 @@
 import datetime as dt
 import requests
-import itertools
-
 
 
 def file_name_creator(soup, cod):
@@ -9,6 +7,7 @@ def file_name_creator(soup, cod):
     Function checks fis web and creates a file name using scraped information from there.
     Name structure: Year-Month-Day_City_TournamentType_HillSize_Gender_Team/Individual (2018-Mar-25_Oberstdorf(GER)_WC_NH_W_I)
     :param soup: web parser by BeautifulSoup (soup)
+    :param cod: fis codex number
     :return: file name as a string
     """
 
@@ -253,6 +252,10 @@ def clear_text(data):
             if row.split()[0][0:3] == 'SJM':
                 continue
 
+            # DSQ row have to handle
+            if 'SCE 4' in row and 'DSQ' not in row:
+                continue
+
             raw_content_list.append(row)
 
     # create jumper list
@@ -267,4 +270,3 @@ def clear_text(data):
         rows_lists.append(list(row))
 
     return rows_lists
-

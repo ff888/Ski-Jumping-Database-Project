@@ -12,11 +12,38 @@ def text_pdfs_scraper_individual(row_data):
 
     for row in row_data:
         print(row)
-        print(row[0])
+        # find if first row element includes nationality value
+        """for i in row[0].split():
+            if i in nation_list:
+                name_ele_zero = True
+            else:
+                name_ele_zero = False"""
+
+        for i in row[1].split():
+            if i in nation_list:
+                name_ele_one = True
+            else:
+                name_ele_one = False
+
+        for i in row[2].split():
+            if i in nation_list:
+                name_ele_two = True
+            else:
+                name_ele_two = False
 
         # reorganise row structure to be consistent
-        if row[0].split()[0][0].isupper() is False:
-            row = [row[2] + ', ' + row[0] + ', ' + row[1]]
+        if name_ele_one:
+            row = [row[1], row[0], row[2]]
+
+        elif name_ele_two:
+            row = [row[2], row[0], row[2]]
+
+        else:
+            row = [row[0], row[1], row[2]]
+
+        # get ranking
+        # ranking
+        ranking = row[1].split()[0].replace('.', '')
 
         # get jumper name, nationality, club
         # get specification of nationality index
@@ -37,7 +64,55 @@ def text_pdfs_scraper_individual(row_data):
         elif name.split()[0] == '*':
             name = ' '.join(name.split()[1:])
 
-        print(name, '...........',  nationality)
+        # get dob and club
+        months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+
+        for i in row[2].split():
+            if i in months:
+                months_index = row[2].split().index(i)
+
+        dob = f'{row[2].split()[months_index - 1]} {row[2].split()[months_index]} {row[2].split()[months_index + 1]}'
+        club = ' '.join(row[2].split()[:months_index - 1])
+
+        print(ranking, name, nationality, dob, club)
+
+        distance_jump_1 = 'NULL'
+        distance_points_1 = 'NULL'
+        speed_jump_1 = 'NULL'
+        judge_marks_jump_1a = 'NULL'
+        judge_marks_jump_1b = 'NULL'
+        judge_marks_jump_1c = 'NULL'
+        judge_marks_jump_1d = 'NULL'
+        judge_marks_jump_1e = 'NULL'
+        judge_total_points_1 = 'NULL'
+        gate_jump_1 = 'NULL'
+        gate_compensation_1 = 'NULL'
+        wind_jump_1 = 'NULL'
+        wind_compensation_1 = 'NULL'
+        total_points_jump_1 = 'NULL'
+        ranking_jump_1 = 'NULL'
+        distance_jump_2 = 'NULL'
+        distance_points_2 = 'NULL'
+        speed_jump_2 = 'NULL'
+        judge_marks_jump_2a = 'NULL'
+        judge_marks_jump_2b = 'NULL'
+        judge_marks_jump_2c = 'NULL'
+        judge_marks_jump_2d = 'NULL'
+        judge_marks_jump_2e = 'NULL'
+        judge_total_points_2 = 'NULL'
+        gate_jump_2 = 'NULL'
+        gate_compensation_2 = 'NULL'
+        wind_jump_2 = 'NULL'
+        wind_compensation_2 = 'NULL'
+        total_points_jump_2 = 'NULL'
+        ranking_jump_2 = 'NULL'
+
+        # get total points
+        # total_points = row[1].split()[-1]
+        team_points = 'NULL'
+        team_ranking = 'NULL'
+
+        #print(ranking, name, nationality, dob, club, total_points)
         print()
 
 

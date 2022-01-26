@@ -10,23 +10,12 @@ from web_scraper import individual_tournament_web_data_scraper,\
 from db_create_and_save import creating_db
 
 
-text_list = [2543, 2544, 2545, 2546, 2547, 2550, 2551, 2553, 2555, 2557, 2559, 2560, 2561, 2563, 2565, 2569, 2571, 2572,
-             2603, 2604, 2625, 2626, 2641, 2647, 2648, 2649, 2651, 2653, 2663, 2670, 2682, 2692, 2721, 2722, 2854, 2855,
-             2856, 2857, 2858, 2859, 2860, 2861, 2862]
-
-exp_list = [2019, 2021, 2534]
-row_list_of_two = [2534, 2542]
-speed_missing = [2534]
-
-all_variants = [1874, 1948, 2539, 2649]
-
-
 def main():
     for cod in TEXT_PDFS:
         print()
         print(cod)
 
-        if cod in exp_list:
+        if cod in [2019, 2021]:
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')

@@ -36,7 +36,7 @@ def raw_data_from_pdfs(fis_pdf):
             print('pdf with text')
             text = page.extract_text()
 
-            content_for_text.append(text.split('\n')[10:])
+            content_for_text.append(text.split('\n')[9:])
 
     # data from tables-pdfs
     cleared_data_tables = clear_tables(content_for_list)
