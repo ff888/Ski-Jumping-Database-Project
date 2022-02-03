@@ -547,3 +547,13 @@ def table_pdfs_scraper_individual(raw_data):
         jumpers_data.append(jumper_row)
 
     return jumpers_data
+
+
+def team_pdf_scraper(data):
+    """
+
+    :param data:
+    :return:
+    """
+
+    pass

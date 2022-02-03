@@ -278,3 +278,45 @@ def clear_text(data):
         rows_lists.append(list(row))
 
     return rows_lists
+
+
+def clear_team_tables(data):
+    """
+
+    :param data:
+    :return:
+    """
+
+    data_to_skip = ['Assistant', '"ruhrgas"', 'Ski-Jumping', 'Official', 'Finish', 'Jury', 'Race', 'Technical', 'created',
+                    'Nat', 'Rank', 'Name', '[km/h]', 'FIS', 'Print', 'Chief', 'Unofficial', 'SKI', 'SAUT', 'Page', 'qualified',
+                    'RESULTS', 'TEAM', 'K120', 'UTAH', 'NOC', 'Report:', 'End',  'Results', 'Centre', 'Willingen', '"e.on', 'presented', 'Wisla', 'Final',
+                    'Hinterzarten', 'Rasnov', 'Ljubno', 'Zao', 'Titisee-Neustadt', 'Ruka', 'Harrachov', 'Planica', 'Kuopio', 'Klingenthal', 'Timing', 'Oslo', 'Lahti', 'Start', 'Fiemme', 'Team', 'FIS',
+                    'timing', 'Ljubno', 'Chaikovsky', 'SEEFELD/TIROL', 'Oberstdorf', 'Chaikovsky', 'Courchevel', 'Zakopane', 'Competition', 'ÉQUIPE', 'provided', 'Report', 'Falun', 'Sapporo', 'Klingenthal',
+                    'Jumping', 'Equipment', 'Not', 'Kuusamo', 'ski.com', 'Vikersund', 'Speed', 'Liberec', 'TIME', '/', 'TECHNICAL', 'EQUIPMENT',
+                    'CORRECTION', 'NSA', 'www.fisskijumping.com', 'www.fis-ski.com', 'Lillehammer', 'Комплекс', 'Complexe', 'Командный', 'Итоговые', 'MON',
+
+                    ]
+
+    for row in data.split('\n'):
+        #print(row.split()[0])
+        # skip not valid rows
+        """if row.split()[0] in data_to_skip:
+            continue"""
+        if row.split()[0][0] == '(':
+            continue
+        if any(item in row.split() for item in data_to_skip):
+            continue
+        if row.split()[0] == 'SCE':
+            continue
+        """if row.split()[2] == '12:12':  # 3337
+            continue"""
+
+        # end when its reach end of valid data
+        if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND']:
+            break
+        """if row.split()[-4] == 'Page':  # 3612
+            break"""
+        print(row.split())
+
+
+

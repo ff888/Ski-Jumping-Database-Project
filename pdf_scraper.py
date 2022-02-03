@@ -1,8 +1,8 @@
 import pdfplumber
 import csv
 
-from pdf_data_converter import text_pdfs_scraper_individual, table_pdfs_scraper_individual
-from helpers import clear_tables, clear_text
+from pdf_data_converter import text_pdfs_scraper_individual, table_pdfs_scraper_individual, team_pdf_scraper
+from helpers import clear_tables, clear_text, clear_team_tables
 from VAR import HEADERS
 
 
@@ -26,6 +26,7 @@ def raw_data_from_pdfs(fis_pdf):
     pages = pdf_file.pages
 
     for page in pages:
+
         # unpack pdfs with tables
         if len(page.extract_tables()) > 0:
             print('pdf with tables')
@@ -53,6 +54,26 @@ def raw_data_from_pdfs(fis_pdf):
         extracted_data.append(row)
 
     return extracted_data
+
+
+def raw_data_for_team_pdfs(fis_pdf):
+    """
+
+    :param data:
+    :return:
+    """
+
+    fis_pdf = fis_pdf + '.pdf'
+
+    # unpacking pdf
+    pdf_file = pdfplumber.open(fis_pdf)
+
+    pages = pdf_file.pages
+
+
+    for page in pages:
+        team_data = page.extract_text()
+        clear_team = clear_team_tables(team_data)
 
 
 def create_csv_file_from_pdf_data(pdf_name, extracted_data):
