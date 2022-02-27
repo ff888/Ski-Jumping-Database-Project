@@ -1,5 +1,8 @@
 import datetime as dt
 import requests
+import itertools
+
+from VAR import nation_list
 
 
 def file_name_creator(soup, cod):
@@ -287,36 +290,141 @@ def clear_team_tables(data):
     :return:
     """
 
-    data_to_skip = ['Assistant', '"ruhrgas"', 'Ski-Jumping', 'Official', 'Finish', 'Jury', 'Race', 'Technical', 'created',
-                    'Nat', 'Rank', 'Name', '[km/h]', 'FIS', 'Print', 'Chief', 'Unofficial', 'SKI', 'SAUT', 'Page', 'qualified',
-                    'RESULTS', 'TEAM', 'K120', 'UTAH', 'NOC', 'Report:', 'End',  'Results', 'Centre', 'Willingen', '"e.on', 'presented', 'Wisla', 'Final',
-                    'Hinterzarten', 'Rasnov', 'Ljubno', 'Zao', 'Titisee-Neustadt', 'Ruka', 'Harrachov', 'Planica', 'Kuopio', 'Klingenthal', 'Timing', 'Oslo', 'Lahti', 'Start', 'Fiemme', 'Team', 'FIS',
-                    'timing', 'Ljubno', 'Chaikovsky', 'SEEFELD/TIROL', 'Oberstdorf', 'Chaikovsky', 'Courchevel', 'Zakopane', 'Competition', 'ÉQUIPE', 'provided', 'Report', 'Falun', 'Sapporo', 'Klingenthal',
-                    'Jumping', 'Equipment', 'Not', 'Kuusamo', 'ski.com', 'Vikersund', 'Speed', 'Liberec', 'TIME', '/', 'TECHNICAL', 'EQUIPMENT',
-                    'CORRECTION', 'NSA', 'www.fisskijumping.com', 'www.fis-ski.com', 'Lillehammer', 'Комплекс', 'Complexe', 'Командный', 'Итоговые', 'MON',
+    data_to_skip = ['RANK BIB NAME', 'Nat (Nat ) Speed DistanceDistance Judges Marks Judges Round Grp\n'
+                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Points Rank',
+                    'NOC (NOC Code) Speed DistanceDistance Judges Marks Judges Round Grp\nRank Bib Total\n'
+                    'Name [km/h] [m] Points A B C D E Points Points Rank',
+                    'Nat Speed Distance Distance Judges Marks Judges Round Grp\nRank Bib Total\n'
+                    'Name [km/h] [m] Points A B C D E Points Points Rank',
+                    'Nat Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
+                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
+                    'Nat (Nat ) Speed Distance Distance Judges Marks Judges Round Grp\nRank Bib Total\n'
+                    'Name [km/h] [m] Points A B C D E Points Points Rank',
+                    'Nat Speed Distance Distance Judges Marks Judges Round Group\nRank Bib Total\n'
+                    'Name [km/h] [m] Points A B C D E Points Points Rank',
+                    'Nat Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
+                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
+                    'NSA Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
+                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
+                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
+                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
+                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
+                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
+                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
+                    'Rank Bib Name Total\n'
+                    '[km / h][m] Points A B C D E Points Gate Points[m / s] Points Points Rank',
+                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
+                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
 
                     ]
 
-    for row in data.split('\n'):
-        #print(row.split()[0])
-        # skip not valid rows
-        """if row.split()[0] in data_to_skip:
-            continue"""
-        if row.split()[0][0] == '(':
-            continue
-        if any(item in row.split() for item in data_to_skip):
-            continue
-        if row.split()[0] == 'SCE':
-            continue
-        """if row.split()[2] == '12:12':  # 3337
-            continue"""
+    clean_rows_list = []
 
-        # end when its reach end of valid data
-        if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND']:
-            break
-        """if row.split()[-4] == 'Page':  # 3612
-            break"""
-        print(row.split())
+    for rows_lists in data:
+        for rows in rows_lists:
 
+            if 'CORRECTION\n27 NOV 12:12' in rows[0]:
+                rows = rows[1:]
+            if rows[0][0] in ['Jury / Competition Management']:
+                rows = rows[3:]
+
+            if rows[0][0] in data_to_skip:
+                rows = rows[1:]
+            if '[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK' in rows[0]:
+                rows = rows[1:]
+            if not rows:
+                continue
+            if rows[0] in ['RANK BIB NAME']:
+                continue
+
+            if rows[0][2] in ['[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK']:
+                rows = rows[1:]
+
+            if rows[0][0] in ['Jury / Competition Management Judges Hill Data']:
+                continue
+            if rows[0][1] in \
+                    ['Time', 'Gate', '[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK']:
+                continue
+            if rows[0][0].split()[0] in ['TIME', 'GATE']:
+                continue
+
+            if rows[0][0] in ['Weather Information', 'Competition / Weather Information']:
+                break
+            if rows[0][1] in ['Group\nGate']:
+                break
+
+            """print(rows)
+            #print()"""
+
+
+    """for i in clean_rows_list:
+        print(i)"""
+
+
+def clear_team_text(data):
+    """
+    Function clears table if rows are not valid (doesn't hold jumper data), for team and mixed competition only.
+    :param data: data pulled from team-pdfs
+    :return: list of jumpers rows
+    """
+
+    data_to_skip = ['Assistant', '"ruhrgas"', 'Ski-Jumping', 'Official', 'Finish', 'Jury', 'Race', 'Technical',
+                    'created', 'Nat', 'Rank', 'Name', '[km/h]', 'FIS', 'Print', 'Chief', 'Unofficial', 'SKI', 'SAUT',
+                    'Page', 'qualified', 'RESULTS', 'TEAM', 'K120', 'UTAH', 'NOC', 'Report:', 'End', 'Results',
+                    'Centre', 'Willingen', '"e.on', 'presented', 'Wisla', 'Final', 'Hinterzarten', 'Rasnov', 'Ljubno',
+                    'Zao', 'Titisee-Neustadt', 'Ruka', 'Harrachov', 'Planica', 'Kuopio', 'Klingenthal', 'Timing',
+                    'Oslo', 'Lahti', 'Start', 'Fiemme', 'Team', 'FIS', 'timing', 'Ljubno', 'Chaikovsky', 'Pragelato',
+                    'SEEFELD/TIROL', 'Oberstdorf', 'Chaikovsky', 'Courchevel', 'Zakopane', 'Competition', 'ÉQUIPE',
+                    'provided', 'Report', 'Falun', 'Sapporo', 'Klingenthal', 'Jumping', 'Equipment', 'Not', 'Kuusamo',
+                    'ski.com', 'Vikersund', 'Speed', 'Liberec', 'TIME', '/', 'TECHNICAL', 'EQUIPMENT', 'CORRECTION',
+                    'NSA', 'www.fisskijumping.com', 'www.fis-ski.com', 'Lillehammer', 'Комплекс', 'Complexe',
+                    'Командный', 'Итоговые', 'MON', 'MANCHE FINALE', 'FINAL', 'MANCHE', 'SAT'
+                    ]
+
+    clean_lines_list = []
+
+    for rows in data:
+        for row in rows.split('\n'):
+
+            # skip not valid rows
+            if row.split()[0][0] == '(':
+                continue
+            if any(item in row.split() for item in data_to_skip):
+                continue
+            if row.split()[0] == 'SCE':
+                continue
+            if '12:12' in row.split() and 'NOV' in row.split():  # 3337
+                continue
+
+            # end when its reach end of valid data
+            if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND']:
+                break
+
+            clean_lines_list.append(row)
+
+    team_list = []
+    line_check = []
+
+    for line in clean_lines_list:
+
+        line_check.append(line.split()[0])
+
+        if any(item in ['9', '9.'] for item in line_check) is False:
+            three_elements_list = clean_lines_list
+            two_elements_list = []
+
+        if line.split()[0] == '9.' or line.split()[0] == '9':
+            index = clean_lines_list.index(line)
+
+            if len(clean_lines_list[index-1].split()) == 2:
+                three_elements_list = clean_lines_list[:index - 1]
+                two_elements_list = clean_lines_list[index - 1:]
+
+            else:
+                three_elements_list = clean_lines_list[:index]
+                two_elements_list = clean_lines_list[index:]
+
+    team_list.append(three_elements_list)
+    team_list.append((two_elements_list))
 
 

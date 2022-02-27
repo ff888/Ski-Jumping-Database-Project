@@ -23,7 +23,7 @@ nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'A
                'SRB', 'SYC', 'SLE', 'SGP', 'SXM', 'SVK', 'SVN', 'SLB', 'SOM', 'ZAF', 'SGS', 'SSD', 'ESP', 'LKA', 'SDN',
                'SUR', 'SJM', 'SWE', 'CHE', 'SYR', 'TWN', 'TJK', 'TZA', 'THA', 'TLS', 'TGO', 'TKL', 'TON', 'TTO', 'TUN',
                'TUR', 'TKM', 'TCA', 'TUV', 'UGA', 'UKR', 'ARE', 'GBR', 'UMI', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM',
-               'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL']
+               'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL', 'RSF', 'ROC']
 
 
 ranking = 'NULL'
@@ -62,8 +62,16 @@ wind_compensation_2 = 'NULL'
 total_points_jump_2 = 'NULL'
 ranking_jump_2 = 'NULL'
 total_points = 'NULL'
+
+team_round_1_ranking = 'NULL'
+team_round_2_ranking = 'NULL'
+
+team_round_1_points = 'NULL'
+team_round_2_points = 'NULL'
+
 team_points = 'NULL'
 team_ranking = 'NULL'
+
 
 # all website codex
 ALL_CODEX = range(0, 10000)

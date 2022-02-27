@@ -4,15 +4,12 @@ from bs4 import BeautifulSoup
 from VAR import *
 from pdf_scraper import raw_data_from_pdfs, raw_data_for_team_pdfs, create_csv_file_from_pdf_data
 from helpers import file_name_creator, download_pdf
-from web_scraper import individual_tournament_web_data_scraper,\
-    save_into_csv_file_web, team_tournament_web_data_scraper
-from db_create_and_save import creating_db
+from web_scraper import \
+    individual_tournament_web_data_scraper,\
+    save_into_csv_file_web, \
+    team_tournament_web_data_scraper
 
-test = [3855, 3860, 3880, 3891, 3901, 4021, 4122, 4125, 4141, 4168,
-              4174, 4183, 4192, 4315, 4318, 4398, 4424, 4427, 4434, 4460, 4580, 4585, 4698, 4718, 4721, 4733, 4740,
-              4744, 4755, 4758, 4861, 4896, 4915, 4921, 4944, 4950, 4956, 4960, 5000, 5008, 5010, 5059, 5136, 5153,
-              5198, 5208, 5228, 5249, 5258, 5260, 5264, 5271, 5276, 5323, 5324, 5328, 5443, 5449, 5455, 5520, 5532,
-              5549, 5558, 5579, 5591, 5594, 5787, 5797, 5799, 5810, 5822, 5831, 5843, 5903, 5906, 5911, 6095]
+from db_create_and_save import creating_db
 
 
 def main():
