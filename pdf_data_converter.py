@@ -555,5 +555,5 @@ def team_pdf_scraper(data):
     :param data:
     :return:
     """
-
     pass
+

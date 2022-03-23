@@ -8,7 +8,6 @@ from web_scraper import \
     individual_tournament_web_data_scraper,\
     save_into_csv_file_web, \
     team_tournament_web_data_scraper
-
 from db_create_and_save import creating_db
 
 
@@ -17,7 +16,7 @@ def main():
         print()
         print(cod)
 
-        if cod in [2019, 2021]:
+        if cod in [2019, 2021, 5059, 3528, 3499]:
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')

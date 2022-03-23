@@ -1,8 +1,5 @@
 import datetime as dt
 import requests
-import itertools
-
-from VAR import nation_list
 
 
 def file_name_creator(soup, cod):
@@ -168,7 +165,7 @@ def download_pdf(soup, file_name):
 
 def disqualification_row_handler(data):
     """
-
+    Creates rows for disqualification jumpers.
     :param data:
     :return:
     """
@@ -177,8 +174,9 @@ def disqualification_row_handler(data):
 
 def team_points_creator():
     """
-    Creates team points value by adding total points by 4 first jumpers from each nationality. If the team consists of 3
-    jumpers, her/his points are added twice. If the team consists of two or one people total_points = 'NULL'
+    Creates team points value by adding total points by 4 first jumpers from each nationality. If there are only three
+    jumpers in the team, points are added twice for 3rd jumper in the team.
+    If the team consists of two or one people total_points == 'NULL'
     :return: team_points
     """
     pass
@@ -283,84 +281,6 @@ def clear_text(data):
     return rows_lists
 
 
-def clear_team_tables(data):
-    """
-
-    :param data:
-    :return:
-    """
-
-    data_to_skip = ['RANK BIB NAME', 'Nat (Nat ) Speed DistanceDistance Judges Marks Judges Round Grp\n'
-                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Points Rank',
-                    'NOC (NOC Code) Speed DistanceDistance Judges Marks Judges Round Grp\nRank Bib Total\n'
-                    'Name [km/h] [m] Points A B C D E Points Points Rank',
-                    'Nat Speed Distance Distance Judges Marks Judges Round Grp\nRank Bib Total\n'
-                    'Name [km/h] [m] Points A B C D E Points Points Rank',
-                    'Nat Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
-                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-                    'Nat (Nat ) Speed Distance Distance Judges Marks Judges Round Grp\nRank Bib Total\n'
-                    'Name [km/h] [m] Points A B C D E Points Points Rank',
-                    'Nat Speed Distance Distance Judges Marks Judges Round Group\nRank Bib Total\n'
-                    'Name [km/h] [m] Points A B C D E Points Points Rank',
-                    'Nat Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
-                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-                    'NSA Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
-                    'Rank Bib Total\nName [km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
-                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation Round Group\n'
-                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
-                    'Rank Bib Name Total\n'
-                    '[km / h][m] Points A B C D E Points Gate Points[m / s] Points Points Rank',
-                    'Speed Distance Distance Judges Marks Judges Gate / Wind Compensation RoundGroup\n'
-                    'Rank Bib Name Total\n[km/h] [m] Points A B C D E Points Gate Points [m/s] Points Points Rank',
-
-                    ]
-
-    clean_rows_list = []
-
-    for rows_lists in data:
-        for rows in rows_lists:
-
-            if 'CORRECTION\n27 NOV 12:12' in rows[0]:
-                rows = rows[1:]
-            if rows[0][0] in ['Jury / Competition Management']:
-                rows = rows[3:]
-
-            if rows[0][0] in data_to_skip:
-                rows = rows[1:]
-            if '[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK' in rows[0]:
-                rows = rows[1:]
-            if not rows:
-                continue
-            if rows[0] in ['RANK BIB NAME']:
-                continue
-
-            if rows[0][2] in ['[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK']:
-                rows = rows[1:]
-
-            if rows[0][0] in ['Jury / Competition Management Judges Hill Data']:
-                continue
-            if rows[0][1] in \
-                    ['Time', 'Gate', '[km/h] [m] POINTS A B C D E POINTS GATE POINTS [m/s] POINTS POINTS RANK']:
-                continue
-            if rows[0][0].split()[0] in ['TIME', 'GATE']:
-                continue
-
-            if rows[0][0] in ['Weather Information', 'Competition / Weather Information']:
-                break
-            if rows[0][1] in ['Group\nGate']:
-                break
-
-            """print(rows)
-            #print()"""
-
-
-    """for i in clean_rows_list:
-        print(i)"""
-
-
 def clear_team_text(data):
     """
     Function clears table if rows are not valid (doesn't hold jumper data), for team and mixed competition only.
@@ -382,6 +302,7 @@ def clear_team_text(data):
                     ]
 
     clean_lines_list = []
+    index_list = []
 
     for rows in data:
         for row in rows.split('\n'):
@@ -397,7 +318,7 @@ def clear_team_text(data):
                 continue
 
             # end when its reach end of valid data
-            if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND']:
+            if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND', 'Temp.']:
                 break
 
             clean_lines_list.append(row)
@@ -405,18 +326,26 @@ def clear_team_text(data):
     team_list = []
     line_check = []
 
+    # creates two list to handle data in different way (list 1: 1-8 places, list 2: 9+ places)
     for line in clean_lines_list:
 
+        # list helper to find 9th place
         line_check.append(line.split()[0])
 
+        # for 1-8 places and no second round, no places 9+
         if any(item in ['9', '9.'] for item in line_check) is False:
             three_elements_list = clean_lines_list
             two_elements_list = []
 
+        # find 9th place index include double 9th places scenario
         if line.split()[0] == '9.' or line.split()[0] == '9':
-            index = clean_lines_list.index(line)
 
-            if len(clean_lines_list[index-1].split()) == 2:
+            i = clean_lines_list.index(line)
+            index_list.append(i)
+
+            index = min(index_list)
+
+            if len(clean_lines_list[index - 1].split()) == 2:
                 three_elements_list = clean_lines_list[:index - 1]
                 two_elements_list = clean_lines_list[index - 1:]
 
@@ -424,7 +353,106 @@ def clear_team_text(data):
                 three_elements_list = clean_lines_list[:index]
                 two_elements_list = clean_lines_list[index:]
 
-    team_list.append(three_elements_list)
-    team_list.append((two_elements_list))
+    # handle problem with formatting, missing element - club
+    if len(two_elements_list) != 0:
+        if two_elements_list[0][0].isalpha():
+            el = two_elements_list[0]
+
+            three_elements_list.append(el)
+            two_elements_list = two_elements_list[1:]
+
+    # handle three elements row (teams that qualified to second round)
+    pre_jumper_line = []
+    if len(three_elements_list[0].split()) == 2 and len(three_elements_list[2].split()) == 2:
+
+        while len(three_elements_list) != 0:
+            pre_jumper_line.append(three_elements_list[0:3])
+
+            del three_elements_list[0:3]
+
+    elif '-' in three_elements_list[1].split()[0] and '-' in three_elements_list[4].split()[0]:
+
+        for i in three_elements_list:
+            pre_jumper_line.append([i])
+
+    else:
+        # find team index
+        team_index_list = []
+        for i in three_elements_list:
+            if '.' in i[:3]:
+
+                index = three_elements_list.index(i)
+                team_index_list.append(index)
+
+        # divide teams in separate list
+        team_list_data = []
+        while len(team_index_list) != 1:
+
+            team_chunk = []
+            for i in three_elements_list[team_index_list[0]:team_index_list[1]]:
+                team_chunk.append(i)
+
+            del team_index_list[0]
+            team_list_data.append(team_chunk)
+
+        pre_jumper_line = []
+        for team_row in team_list_data:
+            team_info = team_row[0]
+
+            pre_jumper_line.append([team_info])
+
+            jumpers_row = team_row[1:]
+
+            while len(jumpers_row) != 0:
+                if len(jumpers_row) <= 3:
+                    pre_jumper_line.append(jumpers_row)
+                    break
+
+                elif '-' in jumpers_row[3].split()[0]:
+                    pre_jumper_line.append(jumpers_row[:2])
+                    del jumpers_row[0:2]
+                    
+                else:
+                    pre_jumper_line.append(jumpers_row[:3])
+                    del jumpers_row[0:3]
+
+    # handle two elements row (teams that not qualified to second round)
+    if len(two_elements_list) == 0:
+        pass
+
+    elif '-' in two_elements_list[1].split()[0] and '-' in two_elements_list[1].split()[0]:
+        for i in two_elements_list:
+            pre_jumper_line.append([i])
+
+    elif len(two_elements_list[0].split()) == 2 and '-' in two_elements_list[4].split()[0]:
+        while len(two_elements_list) != 0:
+            pre_jumper_line.append(two_elements_list[0:3])
+
+            del two_elements_list[0:3]
+
+    elif len(two_elements_list[0].split()) == 2 and '-' in two_elements_list[3].split()[0]:
+        while len(two_elements_list) != 0:
+            pre_jumper_line.append(two_elements_list[0:2])
+
+            del two_elements_list[0:2]
+
+    # create jumper row
+    jumpers_line = []
+    while len(pre_jumper_line) != 0:
+        data_chunk = pre_jumper_line[0:5]
+
+        jumper_1 = data_chunk[0] + data_chunk[1]
+        jumper_2 = data_chunk[0] + data_chunk[2]
+        jumper_3 = data_chunk[0] + data_chunk[3]
+        jumper_4 = data_chunk[0] + data_chunk[4]
+
+        jumpers_line.append(jumper_1)
+        jumpers_line.append(jumper_2)
+        jumpers_line.append(jumper_3)
+        jumpers_line.append(jumper_4)
+
+        del pre_jumper_line[0:5]
+
+    return jumpers_line
 
 

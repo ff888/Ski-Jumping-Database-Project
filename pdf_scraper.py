@@ -2,7 +2,7 @@ import pdfplumber
 import csv
 
 from pdf_data_converter import text_pdfs_scraper_individual, table_pdfs_scraper_individual, team_pdf_scraper
-from helpers import clear_tables, clear_text, clear_team_text, clear_team_tables
+from helpers import clear_tables, clear_text, clear_team_text
 from VAR import HEADERS
 
 
@@ -80,6 +80,7 @@ def raw_data_for_team_pdfs(fis_pdf):
         text_team_list.append(page.extract_text())
 
     clear_data_from_text = clear_team_text(text_team_list)
+    cvs_team_data = team_pdf_scraper(clear_data_from_text)
 
 
 def create_csv_file_from_pdf_data(pdf_name, extracted_data):
