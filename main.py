@@ -12,14 +12,14 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in CODEX_TEAM:
+    for cod in range(0, 10000):
         print()
         print(cod)
 
         if cod in [2019, 2021, 5059, 3528, 3499]:
             continue
 
-        page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
+        page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down') # cookies=cookies, allow_redirects=False
 
         # path to the app
         PATH = "/Users/pik/PycharmProjects/pythonProject/Ski_Jumping_Data_Base_Project"
@@ -90,6 +90,12 @@ def main():
 
                         # unpack tabular data
                         data = raw_data_for_team_pdfs(file_name)
+
+                        # save data into csv file
+                        create_csv_file_from_pdf_data(file_name, data)
+
+                        # save into DB
+                        creating_db(PATH)
 
                 # before 2002 data is on websites only
                 elif int(file_name[0:4]) < 2002:

@@ -214,7 +214,7 @@ def text_pdfs_scraper_individual(row_data):
 
 def table_pdfs_scraper_individual(raw_data):
     """
-    Function takes row data from pdfs tables and converts it to csv.
+    Function takes raw data from pdfs tables and converts it to csv.
     :param raw_data: data from pdf tables extracted by pdfplumber
     :return: formatted data into csv
     """
@@ -384,7 +384,7 @@ def table_pdfs_scraper_individual(raw_data):
         if row[5][-5:] == 'SCE 4' or 'ICR' in row[5] or 'SCE' in row[5]:
             row[5] = row[5].split('\n')[0]
 
-        # replaces spaces and make all values looks the same
+        # replaces space and make all values looks the same
         row[5] = row[5].replace(' ', '')
 
         if row[5] == 'SCE4' or row[5] == 'SCE1.2.1.1':
@@ -551,9 +551,282 @@ def table_pdfs_scraper_individual(raw_data):
 
 def team_pdf_scraper(data):
     """
-
-    :param data:
-    :return:
+    Function takes raw data from team-pdfs tables, pulls and maintain data and converts it to csv.
+    :param data: data from pdf tables extracted by pdfplumber
+    :return: formatted data into csv
     """
-    pass
+    jumpers_data = []
 
+    for row in data:
+        # add club if is included to data
+        if row[-1][0].isalpha():
+            club = row[-1]
+            del row[-1]
+        else:
+            club = 'NULL'
+
+        # reformat first element of the row list that to be consisted for all competition
+        if len(row[0].split()) == 2 and len(row[2].split()) in [1, 2]:
+            row_front = ' '.join(row[1].split()[:-1])
+            row_end = row[1].split()[-1]
+            new_row = [row_front, row[0], row[2], row_end]
+            row[0] = ' '.join(new_row)
+
+            del row[2]
+            del row[1]
+
+        elif len(row[0].split()) == 2 and len(row[2]) > 3:
+            row_front = ' '.join(row[1].split()[:-1])
+            row_end = row[1].split()[-1]
+            new_row = [row_front, row[0], row_end]
+            row[0] = ' '.join(new_row)
+
+            del row[1]
+
+        # for competition that had no second round
+        if len(row) == 2:
+            row.append('No round two')
+
+        # reformat second and third elements of the row list that to be consisted for all competition
+        if row[2] != 'No round two':
+            if len(row[1].split()) < 4:
+                row[1] = ' '.join([row[2].split()[0], row[1], ' '.join(row[2].split()[1:])])
+            else:
+                row[1] = row[2] + ' ' + row[1]
+
+            del row[2]
+
+        if len(row) == 2:
+            row.append('No round two')
+
+        # get ranking
+        ranking = row[0].split()[0].replace('.', '')
+
+        # find nationality
+        team_element = [item.replace('(', '').replace(')', '') for item in row[0].split()]
+        for el in team_element:
+            if el in nation_list:
+                nationality = el
+
+        # get team points first-round/second-round/total
+        points_list = [i for i in row[0].split() if '.' in i]
+
+        # team_round_1_points = 'NULL'
+        # team_round_2_points = 'NULL'
+        team_points = 'NULL'
+        total_points = 'NULL'
+
+        if len(points_list) == 2:
+            # team_round_1_points = points_list[-1]
+            # team_round_2_points = 'NULL'
+            team_points = points_list[-1]
+            total_points = points_list[-1]
+
+        if len(points_list) == 3:
+            # team_round_1_points = points_list[0]
+            # team_round_2_points = points_list[1]
+            team_points = points_list[-1]
+            total_points = str("{:.1f}".format(float(points_list[0]) + float(points_list[1])))
+
+        if len(points_list) == 4:
+            # team_round_1_points = points_list[-1]
+            # team_round_2_points = 'NULL'
+            team_points = points_list[-1]
+            total_points = points_list[-1]
+
+        if len(points_list) == 5:
+            # team_round_1_points = points_list[-1]
+            # team_round_2_points = 'NULL'
+            team_points = points_list[-1]
+            total_points = points_list[-1]
+
+        if len(points_list) == 6:
+            # team_round_1_points = points_list[1]
+            # team_round_2_points = points_list[3]
+            team_points = points_list[-1]
+            total_points = str("{:.1f}".format(float(points_list[1]) + float(points_list[3])))
+
+        # replace "," and "."
+        if ',' == row[1].split()[1][-1]:
+            row[1] = ' '.join([' '.join(row[1].split()[:1]), row[1].split()[1].replace(',', ''),
+                               ' '.join(row[1].split()[2:])])
+
+        if ',' == row[1].split()[2][-1] or '.' == row[1].split()[2][-1]:
+            row[1] = ' '.join([' '.join(row[1].split()[:2]), row[1].split()[2].replace(',', '').replace('.', ''),
+                               ' '.join(row[1].split()[3:])])
+
+        row[1] = row[1].replace(',', '.')
+
+        # handle if there is disqualification in first round
+        if any(item in ['DSQ', 'DNS'] for item in row[1].split()) or len(row[1].split()) < 4:
+            name = ' '.join(row[1].split()[1:3]).title()
+            club = 'NULL'
+            distance_jump_1 = 'NULL'
+            distance_points_1 = 'NULL'
+            speed_jump_1 = 'NULL'
+            judge_marks_jump_1a = 'NULL'
+            judge_marks_jump_1b = 'NULL'
+            judge_marks_jump_1c = 'NULL'
+            judge_marks_jump_1d = 'NULL'
+            judge_marks_jump_1e = 'NULL'
+            judge_total_points_1 = 'NULL'
+            gate_jump_1 = 'NULL'
+            gate_compensation_1 = 'NULL'
+            wind_jump_1 = 'NULL'
+            wind_compensation_1 = 'NULL'
+            total_points_jump_1 = 'NULL'
+            ranking_jump_1 = 'NULL'
+
+        else:
+            # get index of last name element
+            index_point_list = [i for i in row[1].split()[1:] if '.' in i]
+            for i in row[1].split():
+                if i == index_point_list[0]:
+                    name_end_index_point = row[1].split().index(i)
+
+            name = ' '.join(row[1].split()[1:name_end_index_point]).title().replace(',', '')
+
+            first_round_results = row[1].split()[name_end_index_point:]
+
+            # if first element is total ranking
+            if len(first_round_results) == 8:
+                total_points = first_round_results[0]
+                first_round_results = first_round_results[1:]
+
+            # judge points handler
+            if len(first_round_results[3]) in [3, 4]:
+                first_round_results = first_round_results[:3] + [''.join(first_round_results[3:8])] \
+                                      + first_round_results[8:]
+
+            if len(first_round_results[3]) == 8:
+                first_round_results = first_round_results[:3] + [''.join(first_round_results[3:6])] \
+                                      + first_round_results[6:]
+
+            judge_marks_jump_1a = first_round_results[3].split('.')[0] + '.' + \
+                                  first_round_results[3].split('.')[1][0:1]
+
+            judge_marks_jump_1b = first_round_results[3].split('.')[1][1:] + '.' + \
+                                  first_round_results[3].split('.')[2][0:1]
+
+            judge_marks_jump_1c = first_round_results[3].split('.')[2][1:] + '.' + \
+                                  first_round_results[3].split('.')[3][0:1]
+
+            judge_marks_jump_1d = first_round_results[3].split('.')[3][1:] + '.' + \
+                                  first_round_results[3].split('.')[4][0:1]
+
+            judge_marks_jump_1e = first_round_results[3].split('.')[4][1:] + '.' +\
+                                  first_round_results[3].split('.')[5][0:1]
+
+            if first_round_results[3] == first_round_results[-4]:
+
+                gate_jump_1 = 'NULL'
+                gate_compensation_1 = 'NULL'
+                wind_jump_1 = 'NULL'
+                wind_compensation_1 = 'NULL'
+
+            else:
+                gate_wind_data = first_round_results[5:-2]
+
+                # get gate/wind and gate/wind compensation rirst round
+                # for 4 elements
+                if len(gate_wind_data) == 4:
+                    gate_jump_1 = gate_wind_data[0]
+                    gate_compensation_1 = gate_wind_data[1]
+                    wind_jump_1 = gate_wind_data[2]
+                    wind_compensation_1 = gate_wind_data[3]
+
+                # for 3 elements
+                elif len(gate_wind_data) == 3:
+                    gate_jump_1 = gate_wind_data[0]
+                    gate_compensation_1 = 'NULL'
+                    wind_jump_1 = gate_wind_data[1]
+                    wind_compensation_1 = gate_wind_data[2]
+
+        name = name.replace(' (W)', '').replace(' (M)', '')
+        dob = 'NULL'
+
+        distance_jump_1 = first_round_results[1]
+        distance_points_1 = first_round_results[2]
+        speed_jump_1 = first_round_results[0]
+        judge_total_points_1 = first_round_results[4]
+        total_points_jump_1 = first_round_results[-2]
+        ranking_jump_1 = first_round_results[-1].replace('.', '')
+
+        # second round
+        if row[2] in ['0.0', 'No round two']:
+            distance_jump_2 = 'NULL'
+            distance_points_2 = 'NULL'
+            speed_jump_2 = 'NULL'
+            judge_marks_jump_2a = 'NULL'
+            judge_marks_jump_2b = 'NULL'
+            judge_marks_jump_2c = 'NULL'
+            judge_marks_jump_2d = 'NULL'
+            judge_marks_jump_2e = 'NULL'
+            judge_total_points_2 = 'NULL'
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+            total_points_jump_2 = 'NULL'
+            ranking_jump_2 = 'NULL'
+
+        else:
+            row[2] = row[2].replace(',', '.')
+
+            # if speed 2 element missing
+            if len(row[2].split()) == 10:
+                row[2] = 'NULL' + ' ' + row[2]
+
+            distance_jump_2 = row[2].split()[1]
+            distance_points_2 = row[2].split()[2]
+            speed_jump_2 = row[2].split()[0]
+
+            # judge marks handler
+            if len(row[2].split()[3]) in [3, 4]:
+                row[2] = ' '.join(row[2].split()[:3] + [''.join(row[2].split()[3:8])] + row[2].split()[8:])
+
+            elif len(row[2].split()[3]) == 8:
+                row[2] = ' '.join(row[2].split()[:3] + [''.join(row[2].split()[3:6])] + row[2].split()[6:])
+
+            judge_marks_jump_2a = row[2].split()[3].split('.')[0] + '.' + row[2].split()[3].split('.')[1][0:1]
+            judge_marks_jump_2b = row[2].split()[3].split('.')[1][1:] + '.' + row[2].split()[3].split('.')[2][0:1]
+            judge_marks_jump_2c = row[2].split()[3].split('.')[2][1:] + '.' + row[2].split()[3].split('.')[3][0:1]
+            judge_marks_jump_2d = row[2].split()[3].split('.')[3][1:] + '.' + row[2].split()[3].split('.')[4][0:1]
+            judge_marks_jump_2e = row[2].split()[3].split('.')[4][1:] + '.' + row[2].split()[3].split('.')[5][0:1]
+
+            if row[2].split()[3] == row[2].split()[-4]:
+                gate_jump_2 = 'NULL'
+                gate_compensation_2 = 'NULL'
+                wind_jump_2 = 'NULL'
+                wind_compensation_2 = 'NULL'
+
+            else:
+                gate_wind_data = row[2].split()[5:-2]
+
+                if len(gate_wind_data) == 4:
+                    gate_jump_2 = gate_wind_data[0]
+                    gate_compensation_2 = gate_wind_data[1]
+                    wind_jump_2 = gate_wind_data[2]
+                    wind_compensation_2 = gate_wind_data[3]
+                else:
+                    gate_jump_2 = gate_wind_data[0]
+                    gate_compensation_2 = 'NULL'
+                    wind_jump_2 = gate_wind_data[1]
+                    wind_compensation_2 = gate_wind_data[2]
+
+            judge_total_points_2 = row[2].split()[4]
+            total_points_jump_2 = row[2].split()[-2]
+            ranking_jump_2 = row[2].split()[-1].replace('.', '')
+        team_ranking = ranking
+
+        jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
+                      judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
+                      judge_marks_jump_1e, judge_total_points_1, gate_jump_1, gate_compensation_1, wind_jump_1,
+                      wind_compensation_1, total_points_jump_1, ranking_jump_1, distance_jump_2, distance_points_2,
+                      speed_jump_2, judge_marks_jump_2a, judge_marks_jump_2b, judge_marks_jump_2c, judge_marks_jump_2d,
+                      judge_marks_jump_2e, judge_total_points_2, gate_jump_2, gate_compensation_2, wind_jump_2,
+                      wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
+
+        jumpers_data.append(jumper_row)
+
+    return jumpers_data

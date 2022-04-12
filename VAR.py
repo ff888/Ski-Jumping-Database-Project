@@ -25,12 +25,13 @@ nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'A
                'TUR', 'TKM', 'TCA', 'TUV', 'UGA', 'UKR', 'ARE', 'GBR', 'UMI', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM',
                'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL', 'RSF', 'ROC']
 
-
 ranking = 'NULL'
 name = 'NULL'
 nationality = 'NULL'
 dob = 'NULL'
 club = 'NULL'
+
+# round 1
 distance_jump_1 = 'NULL'
 distance_points_1 = 'NULL'
 speed_jump_1 = 'NULL'
@@ -40,29 +41,37 @@ judge_marks_jump_1c = 'NULL'
 judge_marks_jump_1d = 'NULL'
 judge_marks_jump_1e = 'NULL'
 judge_total_points_1 = 'NULL'
+
 gate_jump_1 = 'NULL'
 gate_compensation_1 = 'NULL'
 wind_jump_1 = 'NULL'
 wind_compensation_1 = 'NULL'
+
 total_points_jump_1 = 'NULL'
 ranking_jump_1 = 'NULL'
+
+# round 2
 distance_jump_2 = 'NULL'
 distance_points_2 = 'NULL'
 speed_jump_2 = 'NULL'
+
 judge_marks_jump_2a = 'NULL'
 judge_marks_jump_2b = 'NULL'
 judge_marks_jump_2c = 'NULL'
 judge_marks_jump_2d = 'NULL'
 judge_marks_jump_2e = 'NULL'
 judge_total_points_2 = 'NULL'
+
 gate_jump_2 = 'NULL'
 gate_compensation_2 = 'NULL'
 wind_jump_2 = 'NULL'
 wind_compensation_2 = 'NULL'
+
 total_points_jump_2 = 'NULL'
 ranking_jump_2 = 'NULL'
 total_points = 'NULL'
 
+# team info
 team_round_1_ranking = 'NULL'
 team_round_2_ranking = 'NULL'
 
