@@ -78,7 +78,7 @@ def file_name_creator(soup, cod):
     # type of the tournament
     tournament_type = soup.find('div', class_='event-header__subtitle').text
 
-    if tournament_type == 'World Cup':
+    if tournament_type in ['World Cup', 'Viessmann FIS Ski Jumping World Cup']:
         short_tournament_type = 'WC'
     elif tournament_type == 'World Ski Championships':
         short_tournament_type = 'CH'
@@ -201,7 +201,7 @@ def clear_tables(data):
 
     # clean rows for pdfs with tables
     data_to_skip = ['Jury', 'RACE', 'Club', 'Rank', 'Name', 'Fini', 'not ', 'Disq', 'Code', 'PRAG', 'NOC ',
-                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ']
+                    'Not ', 'TIME', 'WIND', 'Fina', 'GATE', 'No. D', 'Comp', 'Worl', 'FIS ', 'Hill']
 
     data_to_skip = list(x.lower() for x in data_to_skip)
 
@@ -212,17 +212,20 @@ def clear_tables(data):
                     continue
                 if row[0][0:4].lower() in data_to_skip:
                     continue
+
                 if row[0] in ['Weather Information', 'Statistics', '1st Round', 'Did Not Start', 'Qualification']:
                     break
                 if row[0][0:18] == 'Technical Delegate':
                     break
-                if row[0][0:4] == 'NOTE':
+                if row[0][0:4] in ['Note', 'NOTE']:
                     break
 
                 # DSQ row
+                if row[0] == '1st Round':
+                    continue
                 if row[0] == '' or row[0].split()[0] in ['DNS', 'DSQ']:
                     continue
-                if 'SCE 4' in row or 'ICR' in row[2] or 'SCE' in row[2]:
+                if 'SCE' in row or 'ICR' in row[2] or 'SCE' in row[2]:
                     continue
 
                 table_raw_content_list.append(row)
@@ -313,7 +316,7 @@ def clear_team_text(data):
             if any(item in row.split() for item in data_to_skip):
                 continue
             if row.split()[0] == 'SCE':
-                continue
+                disqualification_row_handler(row)
             if '12:12' in row.split() and 'NOV' in row.split():  # 3337
                 continue
 

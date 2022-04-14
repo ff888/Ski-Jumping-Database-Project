@@ -289,6 +289,9 @@ def table_pdfs_scraper_individual(raw_data):
         if len(row[1].split()) > 5 and row[1].split()[0] == 'Man':
             row[1] = row[1][7:]
 
+        if len(row[1]) == 0:
+            del row[1]
+
         if (row[1][0] in skip_bib_number and len(row[1]) in [1, 2, 3, 4, 5]) or row[1].split()[0] == 'Man':
             del row[1]
 

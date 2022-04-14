@@ -187,7 +187,7 @@ Ready for:
       - [yes] tabular pdf scraper for individuals
       - [yes] text pdf scraper for individuals
 
-    [no] Pdf scraper for team competition starts from 2002.
+    [yes] Pdf scraper for team competition starts from 2002.
     [no] handle disqualification rows
 
 ---
