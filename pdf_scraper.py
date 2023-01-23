@@ -60,7 +60,7 @@ def raw_data_from_pdfs(fis_pdf):
 def raw_data_for_team_pdfs(fis_pdf):
     """
 
-    :param data:
+    :param fis_pdf:
     :return:
     """
 
@@ -89,9 +89,18 @@ def raw_data_for_team_pdfs(fis_pdf):
     return extracted_data
 
 
+def save_csv_from_pandas(pdf_name, extracted_data):
+    """
+    Save csv file from pandas DataFrame, plus adds headers
+    """
+
+    file_name = pdf_name + '.csv'
+    extracted_data.to_csv(file_name, index=False)
+
+
 def create_csv_file_from_pdf_data(pdf_name, extracted_data):
     """
-    Function creates csv file with data extracted from pdf, also creates same name as pdf name.
+    Save csv file data, plus adds headers
     """
 
     file_name = pdf_name + '.csv'

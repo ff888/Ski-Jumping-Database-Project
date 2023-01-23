@@ -25,18 +25,18 @@
 
 A hundred years of the ski jumping history on ONE CLICK!
 
-Please note a hundred years of ski jumping is long time, this means thousands of different types of tournaments 
-(World Cup, Olympic, Team, Individual, Man, Woman, Mixed). Over the years, this discipline has changed a lot, the way how this sports is show now is much different then 20-30 years ago, 
-but also technology and how data is store change a lot. This app covers all these changes. 
+Please note a hundred years of ski jumping is a long period of time, which means thousands of different types of tournaments (World Cup, Olympic, Team, Individual, Man, Woman, Mixed). 
+
+Over the years, this discipline has changed a lot. Not only the sport changed has itself, but also the way how is shown. Another important aspect is the technology that is used, and the way how the data is stored is much different from 20-30 years ago. This app covers all these changes.
 
 The goal of the app is to create a database with information about all senior ski jumping tournaments that happened over a hundred years of ski jumping history.
-To achieve this goal, the program has scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web go to "How it's works" section). 
+To achieve this goal, the program has to scrape [fis.com](https://www.fis-ski.com/en) website (to see how data is pulling from the web go to "How it's works" section). 
 
-The program is pulling the data for each tournament and creates csv files (see the "About CSV file Structure" section).
-Creates unique file name (see the "About file name structure" section) and saves it in proper place in a database according to gender, tournament type, season. All to find and manage it easy. 
+The program is pulling the data for each tournament (pdf file or website) and creates csv files (see the "About CSV file Structure" section).
+Creates unique file name (see the "About file name structure" section) and saves it in proper location in a database according to gender, tournament type, season. To access and manage data in the easiest way.
 
-Is worth to mention that fis.com database is not complete, especially records before 2002, where there is lack of detailed data. 
-If you have access to historical ski jumping data records please share it with me I will add it to DB.
+Is worth mentioning that the fis.com database is not complete, especially records before 2002, where details are missing. 
+If you have access to historical ski jumping data records please share them with me I will include them in this app.
 ___
 
 ## ***_How it's works_***
@@ -167,6 +167,8 @@ Thanks to that is easy to find and access a file or group of files using differe
 - [Datetime](https://docs.python.org/3/library/datetime.html "The datetime module supplies classes for manipulating dates and times.")
 - [OS](https://docs.python.org/3/library/os.html "This module provides a portable way of using operating system dependent functionality.")
 - [Shutil](https://docs.python.org/3/library/shutil.html "The shutil module offers a number of high-level operations on files and collections of files.")
+- [Pandas](https://pandas.pydata.org "Pandas is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool,
+built on top of the Python programming language.")
 
 ---
 

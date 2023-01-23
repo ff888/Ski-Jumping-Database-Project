@@ -1,5 +1,9 @@
 import datetime as dt
 import requests
+import pandas as pd
+
+from operator import itemgetter
+from VAR import HEADERS
 
 
 def file_name_creator(soup, cod):
@@ -20,7 +24,7 @@ def file_name_creator(soup, cod):
     # gender and type of tournament check
     info_line = soup.find('div', class_='event-header__kind').text
 
-    if "Men's Team" in info_line:
+    if "Men's Team" in info_line or info_line.split()[1] == 'Team':
         gender = 'M'
         team_or_ind = 'T'
     elif "Women's Team" in info_line:
@@ -59,6 +63,9 @@ def file_name_creator(soup, cod):
                 hill = 'LH'
             elif int(info_line.split()[-1].strip('K')) >= 170:
                 hill = 'SF'
+            else:
+                hill = '??'
+                print('Hill size not defined: ', info_line)
 
         elif info_line.split()[-1][0:2] == 'HS':
             if int(info_line.split()[-1].strip('HS')) <= 49:
@@ -71,6 +78,9 @@ def file_name_creator(soup, cod):
                 hill = 'LH'
             elif int(info_line.split()[-1].strip('HS')) >= 185:
                 hill = 'SF'
+            else:
+                hill = '??'
+                print('Hill size not defined: ', info_line)
         else:
             hill = '??'
             print('Hill size not defined: ', info_line)
@@ -80,7 +90,7 @@ def file_name_creator(soup, cod):
 
     if tournament_type in ['World Cup', 'Viessmann FIS Ski Jumping World Cup']:
         short_tournament_type = 'WC'
-    elif tournament_type == 'World Ski Championships':
+    elif tournament_type in ['World Championships', 'World Ski Championships']:
         short_tournament_type = 'CH'
     elif tournament_type == 'Olympic Winter Games':
         short_tournament_type = 'OL'
@@ -172,27 +182,79 @@ def disqualification_row_handler(data):
     pass
 
 
-def team_points_creator():
+def team_points_creator(data):
     """
-    Creates team points value by adding total points by 4 first jumpers from each nationality. If there are only three
-    jumpers in the team, points are added twice for 3rd jumper in the team.
-    If the team consists of two or one people total_points == 'NULL'
-    :return: team_points
-    """
-    pass
+    Calculates and adds two columns to data: team_points and team_ranking.
 
+    :return: DataFrame updated with two columns team_points and team_ranking
+    """
 
-def team_ranking_creator():
-    """
-    Creates team ranking based on team_points value.
-    :return: team_points
-    """
-    pass
+    df = pd.DataFrame(data)
+    # pd.set_option('display.max_columns', None)
+    df.columns = HEADERS
+
+    df_team = df[['NATIONALITY', 'TOTAL POINTS JUMP 1', 'TOTAL POINTS JUMP 2', 'TEAM POINTS']]
+
+    # if jump2points value is NULL replace by value from jump1points
+    df_team['TOTAL POINTS JUMP 2'].mask(df_team['TOTAL POINTS JUMP 2'] == 'NULL',
+                                        df_team['TOTAL POINTS JUMP 1'], inplace=True)
+
+    # check if there was only one round, if so set jump_2 0.0 points
+    valid_jump_1 = df_team.loc[0, 'TOTAL POINTS JUMP 2']
+    if valid_jump_1 == 'NULL':
+        df_team['TOTAL POINTS JUMP 2'].mask(df['TOTAL POINTS JUMP 2'] == 'NULL', 0.0, inplace=True)
+
+    # check if jumper was DNS in any of round
+    df_team['TOTAL POINTS JUMP 1'].mask(df_team['TOTAL POINTS JUMP 1'] == 'DNS', 0.0, inplace=True)
+    df_team['TOTAL POINTS JUMP 1'].mask(df_team['TOTAL POINTS JUMP 1'] == 'DSQ', 0.0, inplace=True)
+
+    df_team['TOTAL POINTS JUMP 2'].mask(df_team['TOTAL POINTS JUMP 2'] == 'DNS', 0.0, inplace=True)
+    df_team['TOTAL POINTS JUMP 2'].mask(df_team['TOTAL POINTS JUMP 2'] == 'DSQ', 0.0, inplace=True)
+
+    # add jump1 and jump2 and add JUMP_ADDED column to df_team table
+    df_team['TOTAL POINTS JUMP 1'] = df_team['TOTAL POINTS JUMP 1'].str.replace(',', '.').astype(float)
+    df_team['TOTAL POINTS JUMP 2'] = df_team['TOTAL POINTS JUMP 2'].str.replace(',', '.').astype(float)
+
+    df_team['JUMPS_ADDED'] = df_team['TOTAL POINTS JUMP 1'] + df_team['TOTAL POINTS JUMP 2']
+    # print(df_team)
+
+    # list of teams in the competition
+    nation = df_team['NATIONALITY']
+    nation_no_dup_list = nation.drop_duplicates().tolist()
+
+    # choose 4 top jumpers from each team and add points, create list with lists [[nationality, team_points],...]
+    team_and_points = []
+    for i in nation_no_dup_list:
+        filter_by_nationality = (nation == i)
+        team = df_team[filter_by_nationality]
+
+        top_4 = team.nlargest(4, 'JUMPS_ADDED')  # select top 4 jumpers
+        sum_top_4 = top_4['JUMPS_ADDED'].sum()  # add top jumpers points
+
+        team_points = (float("{:.1f}".format(sum_top_4)))
+        team_and_points.append([i, team_points])
+
+    # sort list - descending
+    sort_points = sorted(team_and_points, key=itemgetter(1), reverse=True)
+
+    # add ranking
+    for n in range(1, len(sort_points) + 1):
+        sort_points[n - 1].append(n)
+
+    # create df table with 3 columns
+    df_list = pd.DataFrame(sort_points, columns=['NATIONALITY', 'TEAM POINTS', 'TEAM RANKING'])
+
+    # marge original table with df_list table
+    df.drop(columns=['TEAM POINTS', 'TEAM RANKING'], inplace=True)
+    df_data = pd.merge(df, df_list, how='left', left_on='NATIONALITY', right_on='NATIONALITY')
+
+    return df_data
 
 
 def clear_tables(data):
     """
-    Function clears table if rows are not valid (dasen't hold jumper data).
+    Function clears table if rows are not valid (da not hold jumper data).
+
     :param data: raw data from the pdf tables
     :return: cleared raw data
     """
@@ -227,6 +289,10 @@ def clear_tables(data):
                     continue
                 if 'SCE' in row or 'ICR' in row[2] or 'SCE' in row[2]:
                     continue
+                if row[1] == '':
+                    continue
+                if row[3] == 'Final':
+                    continue
 
                 table_raw_content_list.append(row)
 
@@ -235,7 +301,7 @@ def clear_tables(data):
 
 def clear_text(data):
     """
-    Function clears table if rows are not valid (dasen't hold jumper data).
+    Function clears table if rows are not valid (da not hold jumpers data).
     :param data: raw data pulled from pdf
     :return: list of jumpers rows
     """
@@ -286,7 +352,7 @@ def clear_text(data):
 
 def clear_team_text(data):
     """
-    Function clears table if rows are not valid (doesn't hold jumper data), for team and mixed competition only.
+    Function clears table if rows are not valid (do not hold jumpers data), for team and mixed competition only.
     :param data: data pulled from team-pdfs
     :return: list of jumpers rows
     """
@@ -320,15 +386,13 @@ def clear_team_text(data):
             if '12:12' in row.split() and 'NOV' in row.split():  # 3337
                 continue
 
-            # end when its reach end of valid data
+            # end when its reach end of the table (valid data)
             if row.split()[0] in ['Data', 'Technical', 'Weather', 'Reason', 'Time', 'Base', 'WIND', 'Temp.']:
                 break
 
             clean_lines_list.append(row)
 
-    team_list = []
     line_check = []
-
     # creates two list to handle data in different way (list 1: 1-8 places, list 2: 9+ places)
     for line in clean_lines_list:
 
@@ -383,7 +447,6 @@ def clear_team_text(data):
         team_index_list = []
         for i in three_elements_list:
             if '.' in i[:3]:
-
                 index = three_elements_list.index(i)
                 team_index_list.append(index)
 
@@ -414,7 +477,7 @@ def clear_team_text(data):
                 elif '-' in jumpers_row[3].split()[0]:
                     pre_jumper_line.append(jumpers_row[:2])
                     del jumpers_row[0:2]
-                    
+
                 else:
                     pre_jumper_line.append(jumpers_row[:3])
                     del jumpers_row[0:3]
@@ -459,3 +522,24 @@ def clear_team_text(data):
     return jumpers_line
 
 
+def find_index(data_row, compare_list):
+    """
+    It is comparing two list if it finds the same element in both lists will return index of the element in first list.
+    :param data_row: list of elements from given data row
+    :param compare_list: list of elements that be compared to data_row
+    :return: index nuber
+    """
+
+    count_elements = []  # append elements only before nation element
+    for i in data_row:
+        if i not in compare_list:
+            count_elements.append(i)
+        else:
+
+            break
+
+    index_number = len(count_elements)
+    if len(data_row) == len(count_elements):
+        index_number = 100
+
+    return index_number

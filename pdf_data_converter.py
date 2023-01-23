@@ -1,3 +1,4 @@
+from helpers import find_index
 from VAR import nation_list
 
 
@@ -43,24 +44,31 @@ def text_pdfs_scraper_individual(row_data):
 
                 row = [new_row_0, new_row_1, row[2]]
 
-        # move part of data from row[1] to row[0] to data to be consistent for all rows
+        # move part of data from row[1] to row[0] to be consistent for all rows
         if len(row[1].split()) != 3:
             data_to_move_between_rows = row[0] + ' ' + ' '.join(row[1].split()[2:-1])
             data_for_row_1 = ' '.join(row[1].split()[:2]) + ' ' + row[1].split()[-1]
 
             row = [data_to_move_between_rows, data_for_row_1, row[2]]
 
-        # get ranking
-        ranking = row[1].split()[0].replace('.', '')
+        # find what row element contains information about nationality like -> NOR
+        row_with_nation_element = []
+        for element in row:
+            element_set = set(element.split())
+
+            d = set(nation_list).intersection(element_set)
+            if len(d) == 1:
+                row_with_nation_element.append(element)
 
         # get jumper name, nationality, club
         # get specification of nationality index
-        for i in row[0].split():
-            if i in nation_list:
-                nationality_index = row[0].split().index(i)
+        nationality_index = find_index(row_with_nation_element[0].split(), nation_list)
+
+        # get ranking
+        ranking = row[1].split()[0].replace('.', '')
 
         # get nationality
-        nationality = row[0].split()[nationality_index]
+        nationality = row_with_nation_element[0].split()[nationality_index]
 
         # get name
         name = ' '.join(row[0].split()[0:nationality_index]).title().replace('.', '')
@@ -72,15 +80,20 @@ def text_pdfs_scraper_individual(row_data):
         elif name.split()[0] == '*':
             name = ' '.join(name.split()[1:])
 
+        if len(name.split()[0]) <= 2 and len(name.split()[1]) <= 2:
+            ranking = name.split()[0]
+            name = ' '.join(name.split()[2:])
+
         # get dob and club
         months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+        month_index = find_index(row[2].split(), months)
 
-        for i in row[2].split():
-            if i in months:
-                months_index = row[2].split().index(i)
-
-        dob = ' '.join(row[2].split()[months_index - 1:months_index + 2])
-        club = ' '.join(row[2].split()[:months_index - 1])
+        if month_index == 100:
+            dob = 'NULL'
+            club = 'NULL'
+        else:
+            dob = ' '.join(row[2].split()[month_index - 1:month_index + 2])
+            club = ' '.join(row[2].split()[:month_index - 1])
 
         # handle missing speed_jump_1 value
         if len(row[0].split()[nationality_index + 1:]) == 10 or len(row[0].split()[nationality_index + 1:]) == 8:
@@ -164,35 +177,49 @@ def text_pdfs_scraper_individual(row_data):
         else:
 
             # handle missing speed_jump_2 value
-            if len(row[2].split()[months_index + 2:]) == 10:
+            if len(row[2].split()[month_index + 2:]) == 10:
                 speed_jump_2 = 'NULL'
-                months_index = months_index - 1
+                month_index = month_index - 1
+
+            if len(row[2].split()) == 11 and month_index == 100:
+                speed_jump_2 = row[2].split()[0]
+                distance_jump_2 = row[2].split()[1]
+                distance_points_2 = row[2].split()[2]
+
+                judge_marks_jump_2a = row[2].split()[3]
+                judge_marks_jump_2b = row[2].split()[4]
+                judge_marks_jump_2c = row[2].split()[5]
+                judge_marks_jump_2d = row[2].split()[6]
+                judge_marks_jump_2e = row[2].split()[7]
+
+                judge_total_points_2 = row[2].split()[8]
+                total_points_jump_2 = row[2].split()[9]
+                ranking_jump_2 = row[2].split()[10].replace('.', '')
+
             else:
-                speed_jump_2 = row[2].split()[months_index + 2]
+                speed_jump_2 = row[2].split()[month_index + 2]
+                distance_jump_2 = row[2].split()[month_index + 3]
+                distance_points_2 = row[2].split()[month_index + 4]
+
+                judge_marks_jump_2a = row[2].split()[month_index + 5]
+                judge_marks_jump_2b = row[2].split()[month_index + 6]
+                judge_marks_jump_2c = row[2].split()[month_index + 7]
+                judge_marks_jump_2d = row[2].split()[month_index + 8]
+                judge_marks_jump_2e = row[2].split()[month_index + 9]
+
+                judge_total_points_2 = row[2].split()[month_index + 10]
+                total_points_jump_2 = row[2].split()[month_index + 11]
+                ranking_jump_2 = row[2].split()[month_index + 12].replace('.', '')
 
             gate_jump_1 = 'NULL'
             gate_compensation_1 = 'NULL'
             wind_jump_1 = 'NULL'
             wind_compensation_1 = 'NULL'
 
-            distance_jump_2 = row[2].split()[months_index + 3]
-            distance_points_2 = row[2].split()[months_index + 4]
-
-            judge_marks_jump_2a = row[2].split()[months_index + 5]
-            judge_marks_jump_2b = row[2].split()[months_index + 6]
-            judge_marks_jump_2c = row[2].split()[months_index + 7]
-            judge_marks_jump_2d = row[2].split()[months_index + 8]
-            judge_marks_jump_2e = row[2].split()[months_index + 9]
-
-            judge_total_points_2 = row[2].split()[months_index + 10]
-
             gate_jump_2 = 'NULL'
             gate_compensation_2 = 'NULL'
             wind_jump_2 = 'NULL'
             wind_compensation_2 = 'NULL'
-
-            total_points_jump_2 = row[2].split()[months_index + 11]
-            ranking_jump_2 = row[2].split()[months_index + 12].replace('.', '')
 
         # get total points
         total_points = row[1].split()[-1]
@@ -238,7 +265,7 @@ def table_pdfs_scraper_individual(raw_data):
             if i is None:
                 row.remove(i)
 
-        # replace commas if them used instead of dots
+        # replace commas in the string
         row = [i.replace(',', '.') for i in row]
 
         # get ranking
@@ -308,15 +335,11 @@ def table_pdfs_scraper_individual(raw_data):
 
         # get jumper name, nationality, club
         # get specification of nationality index
-        for i in row[1].split():
-            if i in nation_list:
-                nationality_index = row[1].split().index(i)
+        nationality_index = find_index(row[1].split(), nation_list)
 
-        # get nationality
-        nationality = row[1].split()[nationality_index]
-
-        # get name
+        # get name and nationality
         name = ' '.join(row[1].split()[0:nationality_index]).title().replace('.', '')
+        nationality = row[1].split()[nationality_index]
 
         # skip 'Man of the Day'
         if name[0:6] == 'Man Of':
@@ -344,6 +367,7 @@ def table_pdfs_scraper_individual(raw_data):
         if row[1].split()[-2] == months:
             if row[1].split()[-4] == nationality:
                 club = 'NULL'
+
         if club == '':
             club = 'NULL'
 
@@ -437,6 +461,33 @@ def table_pdfs_scraper_individual(raw_data):
             judge_total_points_2 = 'NULL'
 
         # get gate and wind
+        gate_jump_1 = 'NULL'
+        gate_compensation_1 = 'NULL'
+        gate_jump_2 = 'NULL'
+        gate_compensation_2 = 'NULL'
+
+        wind_jump_1 = 'NULL'
+        wind_compensation_1 = 'NULL'
+        wind_jump_2 = 'NULL'
+        wind_compensation_2 = 'NULL'
+
+        if len(row) == 10:
+            wind_jump_1 = row[8].split()[0]
+            if len(row[8].split()) == 2:
+                wind_compensation_1 = row[8].split()[1]
+            else:
+                wind_compensation_1 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+
+            gate_jump_1 = row[7].split()[0].replace('©', '')
+            if len(row[7].split()) == 2:
+                gate_compensation_1 = row[7].split()[1]
+            else:
+                gate_compensation_1 = 'NULL'
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+
         if row[-5].split() == row[7].split():
 
             # get wind and wind compensation
@@ -476,7 +527,7 @@ def table_pdfs_scraper_individual(raw_data):
 
             # for 2 elements where second is gate comp
             elif len(row[7].split()) == 2 and '.' in row[7].split()[1]:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = row[7].split()[1]
                 gate_jump_2 = 'NULL'
                 gate_compensation_2 = 'NULL'
@@ -495,27 +546,29 @@ def table_pdfs_scraper_individual(raw_data):
                 gate_jump_2 = 'NULL'
                 gate_compensation_2 = 'NULL'
 
-        else:
-            gate_jump_1 = 'NULL'
-            gate_compensation_1 = 'NULL'
-            gate_jump_2 = 'NULL'
-            gate_compensation_2 = 'NULL'
-
-            wind_jump_1 = 'NULL'
-            wind_compensation_1 = 'NULL'
-            wind_jump_2 = 'NULL'
-            wind_compensation_2 = 'NULL'
-
         # get jump total points
-        total_points_jump_1 = row[-3].split()[0]
+        if len(row) == 8:
+            total_points_jump_1 = row[-1]
+        else:
+            total_points_jump_1 = row[-3].split()[0]
 
         if len(row[-3].split()) == 2:
             total_points_jump_2 = row[-3].split()[1]
         else:
             total_points_jump_2 = 'NULL'
 
+        if len(row) == 10:
+            total_points_jump_1 = row[-1]
+            total_points_jump_2 = 'NULL'
+
+        if '-' in total_points_jump_1:
+            total_points_jump_1 = total_points_jump_1.split()[0]
+
         # get jumps ranking
-        ranking_jump_1 = row[-2].split()[0].replace('.', '')
+        if len(row) == 8:
+            ranking_jump_1 = ranking
+        else:
+            ranking_jump_1 = row[-2].split()[0].replace('.', '')
 
         if len(row[-2].split()) == 2:
             ranking_jump_2 = row[-2].split()[1].replace('.', '')
@@ -682,14 +735,16 @@ def team_pdf_scraper(data):
 
         else:
             # get index of last name element
+            name_pointer = find_index(row[1].split(), nation_list)
+            """
             index_point_list = [i for i in row[1].split()[1:] if '.' in i]
             for i in row[1].split():
                 if i == index_point_list[0]:
-                    name_end_index_point = row[1].split().index(i)
+                    name_end_index_point = row[1].split().index(i)"""
 
-            name = ' '.join(row[1].split()[1:name_end_index_point]).title().replace(',', '')
+            name = ' '.join(row[1].split()[1:name_pointer]).title().replace(',', '')
 
-            first_round_results = row[1].split()[name_end_index_point:]
+            first_round_results = row[1].split()[name_pointer:]
 
             # if first element is total ranking
             if len(first_round_results) == 8:

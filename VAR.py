@@ -23,7 +23,8 @@ nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'A
                'SRB', 'SYC', 'SLE', 'SGP', 'SXM', 'SVK', 'SVN', 'SLB', 'SOM', 'ZAF', 'SGS', 'SSD', 'ESP', 'LKA', 'SDN',
                'SUR', 'SJM', 'SWE', 'CHE', 'SYR', 'TWN', 'TJK', 'TZA', 'THA', 'TLS', 'TGO', 'TKL', 'TON', 'TTO', 'TUN',
                'TUR', 'TKM', 'TCA', 'TUV', 'UGA', 'UKR', 'ARE', 'GBR', 'UMI', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM',
-               'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL', 'RSF', 'ROC']
+               'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL', 'RSF', 'ROC', 'GRE',
+               'OAR']
 
 ranking = 'NULL'
 name = 'NULL'
@@ -166,3 +167,10 @@ TEXT_PDFS = [1874, 1875, 1881, 1882, 1886, 1887, 1905, 1940, 1942, 1943, 1944, 1
              2543, 2544, 2545, 2546, 2547, 2550, 2551, 2553, 2555, 2557, 2559, 2560, 2561, 2563, 2565, 2569, 2571, 2572,
              2603, 2604, 2625, 2626, 2641, 2647, 2648, 2649, 2651, 2653, 2663, 2670, 2682, 2692, 2721, 2722, 2854, 2855,
              2856, 2857, 2858, 2859, 2860, 2861, 2862]
+
+season_22_23 = range(6453, 6477)
+something_odd = [6194]  # check how values are distributed wind_points -307!
+
+test = []
+
+team_err = [5059, 3528, 3499, 6351, 6354]

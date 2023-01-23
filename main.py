@@ -1,9 +1,10 @@
 import requests
+import time
 
 from bs4 import BeautifulSoup
 from VAR import *
-from pdf_scraper import raw_data_from_pdfs, raw_data_for_team_pdfs, create_csv_file_from_pdf_data
-from helpers import file_name_creator, download_pdf
+from pdf_scraper import raw_data_from_pdfs, raw_data_for_team_pdfs, save_csv_from_pandas
+from helpers import file_name_creator, download_pdf, team_points_creator
 from web_scraper import \
     individual_tournament_web_data_scraper,\
     save_into_csv_file_web, \
@@ -12,11 +13,11 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in range(2325, 3000):
+    for cod in CODEX_INDIVIDUAL:
         print()
         print(cod)
 
-        if cod in [2019, 2021, 5059, 3528, 3499, 6350, 6351, 6353, 6354]:
+        if cod in [2019, 2021]:
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down') # cookies=cookies, allow_redirects=False
@@ -40,7 +41,10 @@ def main():
             # check for invalid competition city name and skip it
             if soup.h1.text in ('Four Hills Tournament (FIS)', 'Raw Air Tournament (FIS)', 'Russia Blue Bird (FIS)',
                                 'Russia Blue Bird Tournament (FIS)'):
+
+                print(f'Invalid Competition City Name: {soup.h1.text}')
                 continue
+
             if soup.h1.text is None:
                 continue
 
@@ -51,7 +55,7 @@ def main():
                     print(empty_web.text)
                     continue
 
-            except AttributeError:
+            except AttributeError as e:
                 pass
 
             file_name = file_name_creator(soup, cod)
@@ -75,8 +79,11 @@ def main():
                         # unpack tabular data
                         data = raw_data_from_pdfs(file_name)
 
+                        # create team data
+                        updated_data = team_points_creator(data)
+
                         # save data into csv file
-                        create_csv_file_from_pdf_data(file_name, data)
+                        save_csv_from_pandas(file_name, updated_data)
 
                         # save into DB
                         creating_db(PATH)
@@ -91,8 +98,11 @@ def main():
                         # unpack tabular data
                         data = raw_data_for_team_pdfs(file_name)
 
+                        # create team data
+                        team_points_creator(data)
+
                         # save data into csv file
-                        create_csv_file_from_pdf_data(file_name, data)
+                        save_csv_from_pandas(file_name, data)
 
                         # save into DB
                         creating_db(PATH)
@@ -120,4 +130,10 @@ def main():
 
 
 if __name__ == '__main__':
+    start_time = time.time()
+
     main()
+
+    time_msg = time.time() - start_time
+    time_msg = round(time_msg, 2)
+    print(f"--- {time_msg} seconds ---")
