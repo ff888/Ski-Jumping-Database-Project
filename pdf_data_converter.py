@@ -65,7 +65,7 @@ def text_pdfs_scraper_individual(row_data):
         nationality_index = find_index(row_with_nation_element[0].split(), nation_list)
 
         # get ranking
-        ranking = row[1].split()[0].replace('.', '')
+        ranking = row[1].split()[0].replace('.', '').strip('#')
 
         # get nationality
         nationality = row_with_nation_element[0].split()[nationality_index]
@@ -81,7 +81,7 @@ def text_pdfs_scraper_individual(row_data):
             name = ' '.join(name.split()[1:])
 
         if len(name.split()[0]) <= 2 and len(name.split()[1]) <= 2:
-            ranking = name.split()[0]
+            ranking = name.split()[0].strip('#')
             name = ' '.join(name.split()[2:])
 
         # get dob and club
@@ -272,7 +272,7 @@ def table_pdfs_scraper_individual(raw_data):
         if 't' in row[0]:
             row[0] = row[0].split()[0]
 
-        ranking = row[0].replace('.', '')
+        ranking = row[0].replace('.', '').strip('#')
 
         # if speed space is empty
         if row[3] == '':
@@ -656,7 +656,7 @@ def team_pdf_scraper(data):
             row.append('No round two')
 
         # get ranking
-        ranking = row[0].split()[0].replace('.', '')
+        ranking = row[0].split()[0].replace('.', '').strip('#')
 
         # find nationality
         team_element = [item.replace('(', '').replace(')', '') for item in row[0].split()]
