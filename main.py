@@ -13,7 +13,7 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in CODEX_INDIVIDUAL:
+    for cod in [1977]:
         print()
         print(cod)
 

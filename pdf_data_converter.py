@@ -584,6 +584,7 @@ def table_pdfs_scraper_individual(raw_data):
         if distance_jump_2 == 'DSQ':
             distance_jump_2 = 'NULL'
             ranking_jump_2 = 'DSQ'
+        
 
         # get total points
         total_points = row[-1]
@@ -591,6 +592,10 @@ def table_pdfs_scraper_individual(raw_data):
         # get team points/ranking
         team_points = 'NULL'
         team_ranking = 'NULL'
+
+        # fix for the case where 2 elements in total_points --> ['266.7', '-1.1']
+        if len(total_points.split()) == 2:
+            total_points = total_points.split()[0]
 
         jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
                       judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
@@ -601,6 +606,9 @@ def table_pdfs_scraper_individual(raw_data):
                       wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
 
         jumpers_data.append(jumper_row)
+        for i in jumper_row:
+            print(i)
+        print()
 
     return jumpers_data
 
@@ -736,11 +744,6 @@ def team_pdf_scraper(data):
         else:
             # get index of last name element
             name_pointer = find_index(row[1].split(), nation_list)
-            """
-            index_point_list = [i for i in row[1].split()[1:] if '.' in i]
-            for i in row[1].split():
-                if i == index_point_list[0]:
-                    name_end_index_point = row[1].split().index(i)"""
 
             name = ' '.join(row[1].split()[1:name_pointer]).title().replace(',', '')
 
