@@ -93,7 +93,7 @@ def text_pdfs_scraper_individual(row_data):
             club = 'NULL'
         else:
             dob = ' '.join(row[2].split()[month_index - 1:month_index + 2])
-            club = ' '.join(row[2].split()[:month_index - 1])
+            club = ' '.join(row[2].split()[:month_index - 1]).replace(',', '')
 
         # handle missing speed_jump_1 value
         if len(row[0].split()[nationality_index + 1:]) == 10 or len(row[0].split()[nationality_index + 1:]) == 8:
@@ -378,6 +378,16 @@ def table_pdfs_scraper_individual(raw_data):
         if club.split()[0][0] in skip_bib_number and len(club.split()[0]) in [1, 2]:
             club = club[2:].lstrip()
 
+        # when the club name is too long and blend with dob
+        club_names_fix_list = ['Club', 'Hiihtoseur', 'Team', 'Mitterndorf-Steiermark', 'Hinzenbach-Oberoesterreich',
+                               'Hinzenbach-Oberoesterreich', 'Salzkammergut-Oberoesterreich', 'School',
+                               'N.Novgorod-Krasnoyarsk', 'Dinamo', 'Hinzenbach-Oberoesterreich',]
+
+        for club_name in club_names_fix_list:
+            if club_name in dob:
+                dob = dob.strip(club_name)
+                club = club + ' ' + club_name
+
         # get speed
         # replace empty string
         if row[2] == '':
@@ -605,9 +615,6 @@ def table_pdfs_scraper_individual(raw_data):
                       wind_compensation_2, total_points_jump_2, ranking_jump_2, total_points, team_points, team_ranking]
 
         jumpers_data.append(jumper_row)
-        for i in jumper_row:
-            print(i)
-        print()
 
     return jumpers_data
 
