@@ -81,8 +81,6 @@ def main():
 
                         # create team data
                         updated_data = team_points_creator(data)
-                        for i in updated_data:
-                            print(i[0])
 
                         # save data into csv file
                         save_csv_from_pandas(file_name, updated_data)
