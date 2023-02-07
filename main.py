@@ -13,7 +13,7 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in [1977]:
+    for cod in CODEX_INDIVIDUAL:
         print()
         print(cod)
 
@@ -81,6 +81,8 @@ def main():
 
                         # create team data
                         updated_data = team_points_creator(data)
+                        for i in updated_data:
+                            print(i[0])
 
                         # save data into csv file
                         save_csv_from_pandas(file_name, updated_data)

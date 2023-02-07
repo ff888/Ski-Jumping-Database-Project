@@ -584,7 +584,6 @@ def table_pdfs_scraper_individual(raw_data):
         if distance_jump_2 == 'DSQ':
             distance_jump_2 = 'NULL'
             ranking_jump_2 = 'DSQ'
-        
 
         # get total points
         total_points = row[-1]
