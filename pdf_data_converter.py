@@ -49,7 +49,7 @@ def text_pdfs_scraper_individual(row_data):
             data_to_move_between_rows = row[0] + ' ' + ' '.join(row[1].split()[2:-1])
             data_for_row_1 = ' '.join(row[1].split()[:2]) + ' ' + row[1].split()[-1]
 
-            row = [data_to_move_between_rows, data_for_row_1, row[2]]
+            row = [data_to_move_between_rows, data_for_row_1.replace('* ', ''), row[2]]
 
         # find what row element contains information about nationality like -> NOR
         row_with_nation_element = []
@@ -381,7 +381,7 @@ def table_pdfs_scraper_individual(raw_data):
         # when the club name is too long and blend with dob
         club_names_fix_list = ['Club', 'Hiihtoseur', 'Team', 'Mitterndorf-Steiermark', 'Hinzenbach-Oberoesterreich',
                                'Hinzenbach-Oberoesterreich', 'Salzkammergut-Oberoesterreich', 'School',
-                               'N.Novgorod-Krasnoyarsk', 'Dinamo', 'Hinzenbach-Oberoesterreich',]
+                               'N.Novgorod-Krasnoyarsk', 'Dinamo', 'Hinzenbach-Oberoesterreich']
 
         for club_name in club_names_fix_list:
             if club_name in dob:
