@@ -2,24 +2,7 @@
 
 ![SKI JUMPING DATABASE PROJECT](photos/Ski%20Jumping%20DB%20Logo.png)
 
-
----
 # ***SKI JUMPING DATABASE PROJECT***
-
----
-
-### ***_From the author_***
-
->_Hello!_
->
->_This is my first python project, the first step into programming. My "Hello World!" as a developer. Therefore, any help, ideas, constructive feedback or cooperation is very much appreciated._
->
->_All the best,_
-> 
->_Jakub Krajewski_
-
-
----
 
 ## ***_Purpose of the app_***
 
