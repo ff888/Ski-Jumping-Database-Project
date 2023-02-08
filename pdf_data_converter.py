@@ -592,6 +592,11 @@ def table_pdfs_scraper_individual(raw_data):
         else:
             ranking_jump_2 = 'NULL'
 
+        if len(row) == 10:
+            ranking = row[0].strip('.')
+            ranking_jump_1 = row[0].strip('.')
+            ranking_jump_2 = 'NULL'
+
         # for disqualification in the first round
         if distance_jump_1 == 'DSQ':
             distance_jump_1 = 'NULL'
@@ -601,6 +606,11 @@ def table_pdfs_scraper_individual(raw_data):
         if distance_jump_2 == 'DSQ':
             distance_jump_2 = 'NULL'
             ranking_jump_2 = 'DSQ'
+
+        # if ranking value contain f or # strip
+        ranking = ranking.strip('f').strip('#')
+        ranking_jump_1 = ranking_jump_1.strip('f').strip('#')
+        ranking_jump_2 = ranking_jump_2.strip('f').strip('#')
 
         # get total points
         total_points = row[-1]
