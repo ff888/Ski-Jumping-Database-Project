@@ -44,12 +44,15 @@ def text_pdfs_scraper_individual(row_data):
 
                 row = [new_row_0, new_row_1, row[2]]
 
+        # replace comma and get rid of bib * element
+        row = [item.replace('*', '').replace(',', '.') for item in row]
+
         # move part of data from row[1] to row[0] to be consistent for all rows
         if len(row[1].split()) != 3:
             data_to_move_between_rows = row[0] + ' ' + ' '.join(row[1].split()[2:-1])
             data_for_row_1 = ' '.join(row[1].split()[:2]) + ' ' + row[1].split()[-1]
 
-            row = [data_to_move_between_rows, data_for_row_1.replace('* ', ''), row[2]]
+            row = [data_to_move_between_rows, data_for_row_1, row[2]]
 
         # find what row element contains information about nationality like -> NOR
         row_with_nation_element = []
@@ -96,7 +99,11 @@ def text_pdfs_scraper_individual(row_data):
             club = ' '.join(row[2].split()[:month_index - 1]).replace(',', '')
 
         # handle missing speed_jump_1 value
-        if len(row[0].split()[nationality_index + 1:]) == 10 or len(row[0].split()[nationality_index + 1:]) == 8:
+        if len(row[0].split()[nationality_index + 1:]) == 10\
+                or len(row[0].split()[nationality_index + 1:]) == 8\
+                or len(row[0].split()[nationality_index + 1:]) == 14\
+                and float(row[0].split()[5]) < 20.0:
+
             speed_jump_1 = 'NULL'
             nationality_index = nationality_index - 1
         else:
