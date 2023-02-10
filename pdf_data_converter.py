@@ -685,6 +685,10 @@ def table_pdfs_scraper_individual(raw_data):
         if len(total_points.split()) == 2:
             total_points = total_points.split()[0]
 
+        # if qualification round in the table and DSQ in second round
+        if row[2][-5:] == '2ndR:':
+            speed_jump_1 = row[2].split('\n')[1].strip('1stR: ')
+
         # strip © character from gate
         gate_jump_1 = gate_jump_1.strip('©')
         gate_jump_2 = gate_jump_2.strip('©')

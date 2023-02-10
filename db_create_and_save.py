@@ -11,11 +11,11 @@ def season(csv_name):
 
     season_year = csv_name[0:4]
 
-    if csv_name[-13:-11] == 'CH' or csv_name[-13:-11] == 'OL':
+    if csv_name[-13:-11] in ['CH', 'OL', "GP"]:
         season_date = season_year
     elif csv_name[5:7] in ["10", "11", "12"]:
         season_date = f"{season_year}-{int(season_year) + 1}"
-    elif csv_name[5:7] in ["01", "02", "03", "04"]:
+    elif csv_name[5:7] in ["01", "02", "03", "04", "05"]:
         season_date = f"{int(season_year) - 1}-{season_year}"
     else:
         season_date = season_year

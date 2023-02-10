@@ -11,16 +11,16 @@ from web_scraper import \
     team_tournament_web_data_scraper
 from db_create_and_save import creating_db
 
-
+x = [4024]
 def main():
     for cod in CODEX_INDIVIDUAL:
         print()
         print(cod)
 
-        if cod in [2019, 2021, 4024]:  # 4024 3 series in the pdf
+        if cod in [2019, 2021]:  # 4024 3 series in the pdf
             continue
 
-        page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down') # cookies=cookies, allow_redirects=False
+        page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
 
         # path to the app
         PATH = "/Users/pik/PycharmProjects/pythonProject/Ski_Jumping_Data_Base_Project"
@@ -55,7 +55,7 @@ def main():
                     print(empty_web.text)
                     continue
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
 
             file_name = file_name_creator(soup, cod)
