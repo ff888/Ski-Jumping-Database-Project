@@ -17,7 +17,7 @@ def main():
         print()
         print(cod)
 
-        if cod in [2019, 2021]:
+        if cod in [2019, 2021, 4024]:  # 4024 3 series in the pdf
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down') # cookies=cookies, allow_redirects=False

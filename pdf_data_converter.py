@@ -123,7 +123,7 @@ def text_pdfs_scraper_individual(row_data):
         judge_total_points_1 = row[0].split()[nationality_index + 9]
 
         total_points_jump_1 = row[1].split()[-1]
-        ranking_jump_1 = row[1].split()[0].replace('.', '')
+        ranking_jump_1 = row[0].split()[-1].replace('.', '')
 
         # if there is disqualification in second round
         if 'DSQ' in row[2].split():
@@ -208,6 +208,10 @@ def text_pdfs_scraper_individual(row_data):
                 distance_jump_2 = row[2].split()[month_index + 3]
                 distance_points_2 = row[2].split()[month_index + 4]
 
+                # speed jump 2 data missing handler
+                if '.' not in speed_jump_2:
+                    speed_jump_2 = 'NULL'
+
                 judge_marks_jump_2a = row[2].split()[month_index + 5]
                 judge_marks_jump_2b = row[2].split()[month_index + 6]
                 judge_marks_jump_2c = row[2].split()[month_index + 7]
@@ -215,8 +219,14 @@ def text_pdfs_scraper_individual(row_data):
                 judge_marks_jump_2e = row[2].split()[month_index + 9]
 
                 judge_total_points_2 = row[2].split()[month_index + 10]
-                total_points_jump_2 = row[2].split()[month_index + 11]
-                ranking_jump_2 = row[2].split()[month_index + 12].replace('.', '')
+                total_points_jump_2 = row[2].split()[-2]
+                ranking_jump_2 = row[2].split()[-1].strip('.')
+
+                if len(row[2].split()[month_index:]) == 17 and row[2].split()[-1][1] == '.':
+                    ranking_jump_2 = row[2].split()[-1].strip('.')
+
+                if len(row[2].split()[month_index:]) == 14 and row[2].split()[month_index:][-2][-1] == '.':
+                    ranking_jump_2 = row[2].split()[month_index:][-2].strip('.')
 
             gate_jump_1 = 'NULL'
             gate_compensation_1 = 'NULL'
@@ -232,6 +242,11 @@ def text_pdfs_scraper_individual(row_data):
         total_points = row[1].split()[-1]
         team_points = 'NULL'
         team_ranking = 'NULL'
+
+        # clean for cases where ranking contains extra character #
+        ranking = ranking.strip('#')
+        ranking_jump_1 = ranking_jump_1.strip('#')
+        ranking_jump_2 = ranking_jump_2.strip('#')
 
         jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
                       judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
@@ -523,23 +538,23 @@ def table_pdfs_scraper_individual(raw_data):
             # get gate and gate compensation
             # for 4 elements
             if len(row[7].split()) == 4:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = row[7].split()[1]
-                gate_jump_2 = row[7].split()[2]
+                gate_jump_2 = row[7].split()[2].replace('©', '')
                 gate_compensation_2 = row[7].split()[3]
 
             # for 3 elements where second is gate comp
             elif len(row[7].split()) == 3 and '.' in row[7].split()[1]:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = row[7].split()[1]
-                gate_jump_2 = row[7].split()[2]
+                gate_jump_2 = row[7].split()[2].replace('©', '')
                 gate_compensation_2 = 'NULL'
 
             # for 3 elements where second is gate
             elif len(row[7].split()) == 3 and '.' not in row[7].split()[1]:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = 'NULL'
-                gate_jump_2 = row[7].split()[1]
+                gate_jump_2 = row[7].split()[1].replace('©', '')
                 gate_compensation_2 = row[7].split()[2]
 
             # for 2 elements where second is gate comp
@@ -551,22 +566,24 @@ def table_pdfs_scraper_individual(raw_data):
 
             # for 2 elements where second is gate
             elif len(row[7].split()) == 2 and '.' not in row[7].split()[1]:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = 'NULL'
-                gate_jump_2 = row[7].split()[1]
+                gate_jump_2 = row[7].split()[1].replace('©', '')
                 gate_compensation_2 = 'NULL'
 
             # for 1 element
             elif len(row[7].split()) == 1:
-                gate_jump_1 = row[7].split()[0]
+                gate_jump_1 = row[7].split()[0].replace('©', '')
                 gate_compensation_1 = 'NULL'
                 gate_jump_2 = 'NULL'
                 gate_compensation_2 = 'NULL'
 
-        # get jump total points
+        # get ranking and jump total points
         if len(row) == 8:
+            ranking_jump_1 = ranking
             total_points_jump_1 = row[-1]
         else:
+            ranking_jump_1 = row[-2].split()[0].replace('.', '')
             total_points_jump_1 = row[-3].split()[0]
 
         if len(row[-3].split()) == 2:
@@ -575,27 +592,72 @@ def table_pdfs_scraper_individual(raw_data):
             total_points_jump_2 = 'NULL'
 
         if len(row) == 10:
+            ranking = row[0].strip('.')
+            ranking_jump_1 = row[0].strip('.')
+            ranking_jump_2 = 'NULL'
+
             total_points_jump_1 = row[-1]
             total_points_jump_2 = 'NULL'
+
+            gate_jump_1 = 'NULL'
+            gate_compensation_1 = 'NULL'
+            wind_jump_1 = 'NULL'
+            wind_compensation_1 = 'NULL'
+
+            gate_jump_2 = 'NULL'
+            gate_compensation_2 = 'NULL'
+            wind_jump_2 = 'NULL'
+            wind_compensation_2 = 'NULL'
+
+        if len(row[-2].split()) == 2:
+            ranking_jump_2 = row[-2].split()[1].strip('.')
+            if '.' in ranking_jump_2:
+                ranking_jump_2 = 'NULL'
+        else:
+            ranking_jump_2 = 'NULL'
+
+        if len(row) == 10 and '\n' in row[1]:
+
+            if len(row[-3].split()) + len(row[-2].split()) == 4 \
+                    and '.' not in row[-2][-1] \
+                    and len(row[-2].split('\n')[0]) > 3:
+
+                gate_jump_1 = row[-3].split()[0]
+                gate_compensation_1 = row[-3].split()[1]
+                wind_jump_1 = row[-2].split()[0]
+                wind_compensation_1 = row[-2].split()[1]
+
+            elif len(row[-3].split()) == 1 and len(row[-2].split()) == 2:
+                gate_jump_1 = row[-3].split()[0]
+                gate_compensation_1 = 'NULL'
+                wind_jump_1 = row[-2].split()[0]
+                wind_compensation_1 = row[-2].split()[1]
+
+            else:
+                gate_jump_1 = 'NULL'
+                gate_compensation_1 = 'NULL'
+                wind_jump_1 = 'NULL'
+                wind_compensation_1 = 'NULL'
+
+                gate_jump_2 = 'NULL'
+                gate_compensation_2 = 'NULL'
+                wind_jump_2 = 'NULL'
+                wind_compensation_2 = 'NULL'
+
+                total_points_jump_1 = row[7].split('\n')[0]
+                ranking_jump_1 = row[-2].split('\n')[0].strip('.')
+
+            if '\n' in row[1] and '\n' in row[-2]:
+                total_points_jump_2 = row[7].split('\n')[1].strip('.')
 
         if '-' in total_points_jump_1:
             total_points_jump_1 = total_points_jump_1.split()[0]
 
-        # get jumps ranking
-        if len(row) == 8:
-            ranking_jump_1 = ranking
-        else:
-            ranking_jump_1 = row[-2].split()[0].replace('.', '')
-
-        if len(row[-2].split()) == 2:
-            ranking_jump_2 = row[-2].split()[1].replace('.', '')
-        else:
-            ranking_jump_2 = 'NULL'
-
-        if len(row) == 10:
-            ranking = row[0].strip('.')
-            ranking_jump_1 = row[0].strip('.')
-            ranking_jump_2 = 'NULL'
+        # codex 3010: the gate_2 is 02.5 value replace for 2 | 3364 -> 0.5
+        if gate_jump_2 == '02.5':
+            gate_jump_2 = '2'
+        if gate_jump_1 == '0.5':
+            gate_jump_1 = '1'
 
         # for disqualification in the first round
         if distance_jump_1 == 'DSQ':
@@ -622,6 +684,10 @@ def table_pdfs_scraper_individual(raw_data):
         # fix for the case where 2 elements in total_points --> ['266.7', '-1.1']
         if len(total_points.split()) == 2:
             total_points = total_points.split()[0]
+
+        # strip © character from gate
+        gate_jump_1 = gate_jump_1.strip('©')
+        gate_jump_2 = gate_jump_2.strip('©')
 
         jumper_row = [ranking, name, nationality, dob, club, distance_jump_1, distance_points_1, speed_jump_1,
                       judge_marks_jump_1a, judge_marks_jump_1b, judge_marks_jump_1c, judge_marks_jump_1d,
