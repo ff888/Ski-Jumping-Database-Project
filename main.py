@@ -11,13 +11,13 @@ from web_scraper import \
     team_tournament_web_data_scraper
 from db_create_and_save import creating_db
 
-x = [4024]
+
 def main():
-    for cod in CODEX_INDIVIDUAL:
+    for cod in range(6540,9999):
         print()
         print(cod)
 
-        if cod in [2019, 2021]:  # 4024 3 series in the pdf
+        if cod in [2019, 2021, 4024]:  # 4024 3 series in the pdf
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
@@ -40,9 +40,15 @@ def main():
 
             # check for invalid competition city name and skip it
             if soup.h1.text in ('Four Hills Tournament (FIS)', 'Raw Air Tournament (FIS)', 'Russia Blue Bird (FIS)',
-                                'Russia Blue Bird Tournament (FIS)'):
-
+                                'Russia Blue Bird Tournament (FIS)', 'SilvesterTournament(FIS)'):
                 print(f'Invalid Competition City Name: {soup.h1.text}')
+                continue
+
+            # skip pdf with result
+            element_to_skip_finder = soup.find_all('h3', class_='heading heading_l3')
+            element_to_skip_finder = [item.text for item in element_to_skip_finder]
+            if 'UNOFFICIAL RESULTS (PARTIAL)' in element_to_skip_finder:
+                print('UNOFFICIAL RESULTS (PARTIAL)')
                 continue
 
             if soup.h1.text is None:
@@ -92,7 +98,7 @@ def main():
                     elif file_name[-1] == 'T' or file_name[-1] == 'X':
                         print('Team PDF')
 
-                        # download pdf
+                        """# download pdf
                         download_pdf(soup, file_name)
 
                         # unpack tabular data
@@ -105,7 +111,7 @@ def main():
                         save_csv_from_pandas(file_name, data)
 
                         # save into DB
-                        creating_db(PATH)
+                        creating_db(PATH)"""
 
                 # before 2002 data is on websites only
                 elif int(file_name[0:4]) < 2002:

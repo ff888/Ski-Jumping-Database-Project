@@ -90,4 +90,3 @@ def creating_db(src):
 
         if file.endswith(".csv") or file.endswith(".pdf"):
             os.remove(file)
-
