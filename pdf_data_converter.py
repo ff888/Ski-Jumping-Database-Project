@@ -404,12 +404,23 @@ def table_pdfs_scraper_individual(raw_data):
         # when the club name is too long and blend with dob
         club_names_fix_list = ['Club', 'Hiihtoseur', 'Team', 'Mitterndorf-Steiermark', 'Hinzenbach-Oberoesterreich',
                                'Hinzenbach-Oberoesterreich', 'Salzkammergut-Oberoesterreich', 'School',
-                               'N.Novgorod-Krasnoyarsk', 'Dinamo', 'Hinzenbach-Oberoesterreich']
+                               'N.Novgorod-Krasnoyarsk', 'Dinamo', 'Hinzenbach-Oberoesterreich', 'R.L']
 
         for club_name in club_names_fix_list:
             if club_name in dob:
                 dob = dob.strip(club_name)
                 club = club + ' ' + club_name
+
+        # skip if bib in club
+        if club[0] == '*':
+            club = ' '.join(club.split()[1:])
+
+        # fix Beijing pdf name/club error
+        club_err_list = ['Mackenzie', 'Sergeevich', 'Egner', 'Gregor']
+        for err in club_err_list:
+            if club == err:
+                club = 'NULL'
+                name = name + ' ' + err
 
         # get speed
         # replace empty string
