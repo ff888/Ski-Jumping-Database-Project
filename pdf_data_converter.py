@@ -346,6 +346,7 @@ def table_pdfs_scraper_individual(raw_data):
 
         if row[1] == 'Man of\nthe Day' or row[1] == 'Man of\nhe Day':
             del row[1]
+
         if row[1].split()[0][0] in skip_bib_number and row[1].split()[1] != range(0, 9):
             if row[1].split()[0][0] == '*':
                 row[1] = row[1][3:].lstrip()

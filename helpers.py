@@ -289,7 +289,7 @@ def clear_tables(data):
                     continue
                 if 'SCE' in row or 'ICR' in row[2] or 'SCE' in row[2]:
                     continue
-                if row[1] == '':
+                if row[1] == '' and row[3][:3] != 'QuR':
                     continue
                 if row[3] == 'Final':
                     continue
