@@ -18,6 +18,10 @@ def file_name_creator(soup, cod):
     # city name where the tournament held
     city = soup.h1.text.replace(' ', '').replace('/', '')
 
+    # skip extra data in city name (Grenoble '68)
+    if '(OWG+WSC)' in city:
+        city = city.replace('(OWG+WSC)', '')
+
     if ',' in city:
         city = city.split(',')[0] + city.split(',')[1][2:]
 
@@ -535,7 +539,6 @@ def find_index(data_row, compare_list):
         if i not in compare_list:
             count_elements.append(i)
         else:
-
             break
 
     index_number = len(count_elements)

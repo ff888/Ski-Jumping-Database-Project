@@ -7,6 +7,7 @@ HEADERS = ['RANKING', 'NAME', 'NATIONALITY', 'DOB', 'CLUB', 'DISTANCE JUMP 1', '
            'GATE JUMP 2', 'GATE COMPENSATION JUMP 2', 'WIND JUMP 2', 'WIND COMPENSATION JUMP 2', 'TOTAL POINTS JUMP 2',
            'RANKING JUMP 2', 'TOTAL POINTS', 'TEAM POINTS', 'TEAM RANKING']
 
+
 nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'ARG', 'ARM', 'ABW', 'AUS', 'AUT', 'AZE',
                'BHR', 'BGD', 'BRB', 'BLR', 'BEL', 'BLZ', 'BEN', 'BMU', 'BTN', 'BOL', 'BES', 'BIH', 'BWA', 'BVT', 'BRA',
                'IOT', 'BRN', 'BGR', 'BFA', 'BDI', 'CPV', 'KHM', 'CMR', 'CAN', 'CYM', 'CAF', 'TCD', 'CHL', 'CHN', 'CXR',
@@ -24,7 +25,7 @@ nation_list = ['AFG', 'ALB', 'DZA', 'ASM', 'AND', 'AGO', 'AIA', 'ATA', 'ATG', 'A
                'SUR', 'SJM', 'SWE', 'CHE', 'SYR', 'TWN', 'TJK', 'TZA', 'THA', 'TLS', 'TGO', 'TKL', 'TON', 'TTO', 'TUN',
                'TUR', 'TKM', 'TCA', 'TUV', 'UGA', 'UKR', 'ARE', 'GBR', 'UMI', 'USA', 'URY', 'UZB', 'VUT', 'VEN', 'VNM',
                'VGB', 'VIR', 'WLF', 'ESH', 'YEM', 'ZMB', 'ZWE', 'ALA', 'GER', 'SUI', 'SLO', 'BUL', 'RSF', 'ROC', 'GRE',
-               'OAR']
+               'OAR', 'DDR', 'SOV', 'JUG', 'Jug', 'TCH', 'URS', 'RUM', 'SCG', 'FR', 'BRD', 'CIS']
 
 ranking = 'NULL'
 name = 'NULL'

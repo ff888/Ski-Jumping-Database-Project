@@ -374,6 +374,9 @@ def table_pdfs_scraper_individual(raw_data):
         if row[1].split()[-2] in months:
             dob = ' '.join(row[1].split()[-3:])
             club = ' '.join(row[1].split()[(nationality_index + 1):-3])
+            # if no club data
+            if len(club.split()) <= 2 and club.isnumeric():
+                club = 'NULL'
 
         elif row[1].split()[-1] in nation_list and row[1].split()[-2] not in months:
             dob = 'NULL'
@@ -415,7 +418,7 @@ def table_pdfs_scraper_individual(raw_data):
         if club[0] == '*':
             club = ' '.join(club.split()[1:])
 
-        # fix Beijing pdf name/club error
+        # fix Beijing 2022 pdf name/club error
         club_err_list = ['Mackenzie', 'Sergeevich', 'Egner', 'Gregor']
         for err in club_err_list:
             if club == err:
@@ -682,9 +685,9 @@ def table_pdfs_scraper_individual(raw_data):
             ranking_jump_2 = 'DSQ'
 
         # if ranking value contain f or # strip
-        ranking = ranking.strip('f').strip('#')
-        ranking_jump_1 = ranking_jump_1.strip('f').strip('#')
-        ranking_jump_2 = ranking_jump_2.strip('f').strip('#')
+        ranking = ranking.strip('f').strip('#').strip('=')
+        ranking_jump_1 = ranking_jump_1.strip('f').strip('#').strip('=')
+        ranking_jump_2 = ranking_jump_2.strip('f').strip('#').strip('=')
 
         # get total points
         total_points = row[-1]

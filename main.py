@@ -13,11 +13,11 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in [6350, 6353]:
+    for cod in [269] :
         print()
         print(cod)
 
-        if cod in [2019, 2021, 2649]:  # | 2649 name issue in 14 position
+        if cod in [2019, 2021, 2649]:  # | 2649 name issue in 14 position    range(23, 6432)
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
@@ -131,8 +131,8 @@ def main():
 
                         # save csv file
                         data = team_tournament_web_data_scraper(soup)
-                        save_into_csv_file_web(data, file_name)
-                        creating_db(PATH)
+                        #save_into_csv_file_web(data, file_name)
+                        #creating_db(PATH)
 
 
 if __name__ == '__main__':

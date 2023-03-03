@@ -1,6 +1,7 @@
 import csv
 
-from VAR import HEADERS
+from helpers import find_index
+from VAR import HEADERS, nation_list
 
 
 def individual_tournament_web_data_scraper(soup):
@@ -10,35 +11,46 @@ def individual_tournament_web_data_scraper(soup):
     :return: list with tuples representing line information about ranking/jumper name/nationality/total points.
     """
     # scrap tables for individual tournaments
-    positions = soup.find_all('div', class_="g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right pr-1 gray bold")
+    table = soup.find('div', id='events-info-results')
+    rows = table.find_all('div', class_="g-row justify-sb")
 
-    positions_list = []
-    for position in positions:
-        positions_list.append(position.text)
+    table_row_list = []
+    for row in rows:
 
-    names = soup.find_all('div', class_="g-lg g-md g-sm g-xs justify-left bold")
+        jumper_row = row.text.split()
+        # get ranking
+        ranking = jumper_row[0]
 
-    name_list = []
-    for name in names:
-        name_list.append(name.text.strip())
+        # get nationality -> use it's index
+        nationality_index = find_index(jumper_row, nation_list)
+        nationality = jumper_row[nationality_index].upper()
 
-    country_div = soup.find('div', id='events-info-results')
-    country = country_div.find_all('span', class_='country__name-short')
+        # fix error
+        if nationality == 'FR':
+            nationality = 'FRA'
+        if nationality == 'BRD':
+            nationality = 'GER'
 
-    country_list = []
-    for nationality in country:
-        country_list.append(nationality.text)
+        # get name - une nationality index
+        if jumper_row[nationality_index - 1].isnumeric():
+            name = ' '.join(jumper_row[2:nationality_index - 1]).title()
+        else:
+            name = ' '.join(jumper_row[2:nationality_index]).title()
 
-    points = soup.find_all('div', class_='g-lg-2 g-md-2 g-sm-3 g-xs-5 justify-right blue bold')
+        # get total points
+        if jumper_row[-1] in nation_list:
+            total_points = 'NULL'
+        else:
+            total_points = jumper_row[-2]
 
-    points_list = []
-    for point in points:
-        points_list.append(point.text.strip())
+        jumper_data_row = [
+            ranking, name, nationality, 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL',
+            'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL',
+            'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', total_points, 'NULL', 'NULL']
 
-    # combine all list together
-    rows = list(zip(positions_list, name_list, country_list, points_list))
+        table_row_list.append(jumper_data_row)
 
-    return rows
+    return table_row_list
 
 
 def team_tournament_web_data_scraper(soup):
@@ -48,7 +60,60 @@ def team_tournament_web_data_scraper(soup):
     :return: list with tuples representing line information about ranking/jumper name/nationality/total points.
     """
     # scrap tables for team tournaments
-    ranking = soup.find_all('div', class_="g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1")
+    # scrap tables for individual tournaments
+    table = soup.find('div', id='events-info-results')
+    rows = table.find_all('div', class_="g-row justify-sb")
+
+    table_row_list = []
+    for row in table:
+        jumper_row = row.text.split()
+        if len(jumper_row) == 0:
+            continue
+
+        # remove extra item
+        jumper_row = [item for item in jumper_row if item != 'REPUBLIC']
+
+        # create list with nationality indexes
+        national_index_list = []
+        for national in jumper_row:
+            if national in nation_list:
+                national_index_list.append(jumper_row.index(national))
+        national_index_list = [(item-3) for item in national_index_list]
+
+        teams_list = []
+        for num in range(len(national_index_list)+1):
+            teams_list.append(jumper_row[national_index_list[0]:national_index_list[1]])
+            del national_index_list[0]
+            if len(national_index_list) == 1:
+                teams_list.append(jumper_row[national_index_list[0]:])
+                break
+
+        jumper_row_filtered = []
+        for team in teams_list:
+            rank = team[0]
+            nat = team[3]
+            team_points = team[4]
+
+            # skip all numerical data to pull only names
+            jumpers_names = [item for item in team[6:] if item.isalpha()]
+
+
+
+            """jumpers_names = [item for item in team[6:] if item.isalpha()]
+            
+            for name in jumpers_names:
+                names_joined_list = []
+                if name[1:].islower():
+                    names_joined_list.append(name)"""
+
+
+
+
+
+
+
+
+    """ranking = soup.find_all('div', class_="g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1")
 
     ranking_list = []
     for r in ranking:
@@ -95,7 +160,7 @@ def team_tournament_web_data_scraper(soup):
 
         for jump in line[0]:
             row = (rank, jump, nat, pt)
-            rows.append(row)
+            rows.append(row)"""
 
     return rows
 
