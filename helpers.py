@@ -53,7 +53,9 @@ def file_name_creator(soup, cod):
         hill = 'NH'
     elif 'Large Hill' in info_line:
         hill = 'LH'
-    elif 'Flying Hill' in info_line or "Men's Team Flying H." in info_line:
+    elif 'Flying Hill' in info_line \
+            or "Men's Team Flying H." in info_line\
+            or "Men's Team Flying H." in ' '.join(info_line.split()):
         hill = 'SF'
     else:
         if info_line.split()[-1][0] == 'K':

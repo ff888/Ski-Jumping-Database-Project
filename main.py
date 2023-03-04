@@ -13,11 +13,11 @@ from db_create_and_save import creating_db
 
 
 def main():
-    for cod in [269] :
+    for cod in range(23, 6432):
         print()
         print(cod)
 
-        if cod in [2019, 2021, 2649]:  # | 2649 name issue in 14 position    range(23, 6432)
+        if cod in [2019, 2021, 2649]:  # | 2649 name issue in 14 position
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
