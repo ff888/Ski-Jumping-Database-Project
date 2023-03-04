@@ -62,16 +62,14 @@ def team_tournament_web_data_scraper(soup):
     # scrap tables for team tournaments
     # scrap tables for individual tournaments
     table = soup.find('div', id='events-info-results')
-    rows = table.find_all('div', class_="g-row justify-sb")
 
-    table_row_list = []
     for row in table:
         jumper_row = row.text.split()
         if len(jumper_row) == 0:
             continue
 
         # remove extra item
-        jumper_row = [item for item in jumper_row if item != 'REPUBLIC']
+        jumper_row = [item for item in jumper_row if item not in ['THE', 'REPUBLIC']]
 
         # create list with nationality indexes
         national_index_list = []
@@ -88,81 +86,39 @@ def team_tournament_web_data_scraper(soup):
                 teams_list.append(jumper_row[national_index_list[0]:])
                 break
 
-        jumper_row_filtered = []
+        jumper_data_row = []
         for team in teams_list:
+            if len(team) in [0, 1]:
+                continue
+
             rank = team[0]
             nat = team[3]
             team_points = team[4]
 
-            # skip all numerical data to pull only names
-            jumpers_names = [item for item in team[6:] if item.isalpha()]
+            name_list_with_no_numeric_val = []
+            for item in team[6:]:
+                if item.isalpha() and item != 'x' or '-' in item:
+                    name_list_with_no_numeric_val.append(item + '+')
 
+                else:
+                    name_list_with_no_numeric_val.append('*****')
 
+            jumper_list = ''.join(name_list_with_no_numeric_val).split('*****')
+            jumper_list = [i for i in jumper_list if i != '']
+            for jumper in jumper_list:
+                jumper = jumper.rstrip('+').rstrip('+*****')
+                jumper = jumper.replace('+', ' ').title()
 
-            """jumpers_names = [item for item in team[6:] if item.isalpha()]
-            
-            for name in jumpers_names:
-                names_joined_list = []
-                if name[1:].islower():
-                    names_joined_list.append(name)"""
+                if 'Xxxx' in jumper:
+                    continue
 
+                jumper_data_row.append([
+                    rank, jumper, nat, 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL',
+                    'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL',
+                    'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL',
+                    team_points, rank])
 
-
-
-
-
-
-
-    """ranking = soup.find_all('div', class_="g-lg-1 g-md-1 g-sm-1 g-xs-2 justify-right bold pr-1")
-
-    ranking_list = []
-    for r in ranking:
-        ranking_list.append(r.text)
-
-    total_points = soup.find_all('div', class_="g-lg-2 g-md-2 g-sm-3 g-xs-5 justify-right")
-
-    total_points_list = []
-    for p in total_points:
-        if p.text != '':
-            total_points_list.append(p.text)
-
-    jumper = soup.find_all('div', class_="g-lg-17 g-md-17 g-sm-13 g-xs-11 justify-left bold")
-
-    jumper_list = []
-    for j in jumper:
-        jumper_list.append(j.text.strip())
-
-    nationalities_list = []
-    for n in jumper_list[0::5]:
-        if n == 'JAPAN':
-            nation = 'JPN'
-        elif n == 'SWITZERLAND':
-            nation = 'SUI'
-        else:
-            nation = n[0:3]
-
-        nationalities_list.append(nation)
-
-    jumper_1 = jumper_list[1::5]
-    jumper_2 = jumper_list[2::5]
-    jumper_3 = jumper_list[3::5]
-    jumper_4 = jumper_list[4::5]
-
-    jumpers_team = list(zip(jumper_1, jumper_2, jumper_3, jumper_4))
-    rank_points = list(zip(ranking_list, nationalities_list, total_points_list))
-    lines = list(zip(jumpers_team, rank_points))
-
-    rows = []
-    for line in lines:
-        rank = line[1][0]
-        nat = line[1][1]
-        pt = line[1][2]
-
-        for jump in line[0]:
-            row = (rank, jump, nat, pt)
-            rows.append(row)"""
-
-    return rows
+        return jumper_data_row
 
 
 def save_into_csv_file_web(data, file_name):
