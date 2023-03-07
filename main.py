@@ -3,21 +3,24 @@ import time
 
 from bs4 import BeautifulSoup
 from VAR import *
-from pdf_scraper import raw_data_from_pdfs, raw_data_for_team_pdfs, save_csv_from_pandas
+from pdf_scraper import raw_data_from_pdfs, save_csv_from_pandas
 from helpers import file_name_creator, download_pdf, team_points_creator
+
 from web_scraper import \
     individual_tournament_web_data_scraper,\
     save_into_csv_file_web, \
+    save_web_team_into_csv, \
     team_tournament_web_data_scraper
+
 from db_create_and_save import creating_db
 
 
 def main():
-    for cod in range(23, 6432):
+    for cod in ALL_CODEX:
         print()
         print(cod)
 
-        if cod in [2019, 2021, 2649, 842]:  # | 2649 name issue in 14 position range(23, 6432) [842, 1048]
+        if cod in [2019, 2021, 2649, 842]:  # 2019, 2021 formatting pdf err | 2649 name issue in 14 position | [842, 1048]
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
@@ -131,7 +134,7 @@ def main():
 
                         # save csv file
                         data = team_tournament_web_data_scraper(soup)
-                        save_into_csv_file_web(data, file_name)
+                        save_web_team_into_csv(data, file_name)
                         creating_db(PATH)
 
 

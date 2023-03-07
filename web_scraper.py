@@ -109,6 +109,7 @@ def team_tournament_web_data_scraper(soup):
                 jumper = jumper.rstrip('+').rstrip('+*****')
                 jumper = jumper.replace('+', ' ').title()
 
+                # in some cases web using xxxx instead of date-year skip this err
                 if 'Xxxx' in jumper:
                     continue
 
@@ -119,6 +120,19 @@ def team_tournament_web_data_scraper(soup):
                     team_points, rank])
 
         return jumper_data_row
+
+
+def save_web_team_into_csv(data, file_name):
+    """
+    Save info from web team tournaments (only before 2002) into csv file, plus add HEADERS to the file
+    :param data: tournament table information scrape from web
+    :param file_name: name of the file info taken from web
+    """
+    with open(file_name + '.csv', 'a') as fh:
+        csv_writer = csv.writer(fh)
+        csv_writer.writerow(HEADERS)
+        for row in data:
+            csv_writer.writerow(row)
 
 
 def save_into_csv_file_web(data, file_name):

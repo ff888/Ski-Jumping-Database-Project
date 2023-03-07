@@ -93,7 +93,6 @@ def save_csv_from_pandas(pdf_name, extracted_data):
     """
     Save csv file from pandas DataFrame, plus adds headers
     """
-
     file_name = pdf_name + '.csv'
     extracted_data.to_csv(file_name, index=False)
 
