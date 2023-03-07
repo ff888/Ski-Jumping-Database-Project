@@ -20,7 +20,7 @@ def main():
         print()
         print(cod)
 
-        if cod in [2019, 2021, 2649, 842]:  # 2019, 2021 formatting pdf err | 2649 name issue in 14 position | [842, 1048]
+        if cod in [2019, 2021, 2649]:  # 2019, 2021 formatting pdf err | 2649 name issue in 14 position | [842, 1048]
             continue
 
         page = requests.get(f'https://www.fis-ski.com/DB/general/results.html?sectorcode=JP&raceid={cod}#down')
